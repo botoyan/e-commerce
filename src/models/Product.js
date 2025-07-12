@@ -33,7 +33,7 @@ const productSchema = new Schema(
   { timestamps: true }
 );
 
-module.exports =
+const Product =
   mongoose.models.Product || mongoose.model("Product", productSchema);
-
+export default Product;
 //TODO need to add more schemas

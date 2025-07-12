@@ -1,12 +1,9 @@
 "use client";
-import React, { useEffect, useState, useRef } from "react";
+import React, { useState, useRef } from "react";
+import Dropdown from "../_components/dropdown";
+import FileUploader from "../_components/fileUploader";
 
 const AddProductForm = () => {
-  const menDropdown = useRef<HTMLDivElement>(null);
-  const womenDropdown = useRef<HTMLDivElement>(null);
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const categoryDropdown = useRef<HTMLDivElement>(null);
-
   const menSizes: string[] = [
     "6",
     "6.5",
@@ -52,12 +49,10 @@ const AddProductForm = () => {
     "Casual",
     "Training & Gym",
   ];
-  const [categoryDropdownOpen, setCategoryDropdownOpen] = useState(false);
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedMenSizes, setSelectedMenSizes] = useState<string[]>([]);
-  const [menDropdownOpen, setMenDropdownOpen] = useState<boolean>(false);
   const [selectedWomenSizes, setSelectedWomenSizes] = useState<string[]>([]);
-  const [womenDropdownOpen, setWomenDropdownOpen] = useState<boolean>(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleMenSize = (size: string) => {
     setSelectedMenSizes((prev) =>
@@ -95,37 +90,6 @@ const AddProductForm = () => {
     });
   };
 
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        menDropdownOpen &&
-        menDropdown.current &&
-        !menDropdown.current.contains(event.target as Node)
-      ) {
-        setMenDropdownOpen(false);
-      }
-      if (
-        womenDropdownOpen &&
-        womenDropdown.current &&
-        !womenDropdown.current.contains(event.target as Node)
-      ) {
-        setWomenDropdownOpen(false);
-      }
-      if (
-        categoryDropdown &&
-        categoryDropdown.current &&
-        !categoryDropdown.current.contains(event.target as Node)
-      ) {
-        setCategoryDropdownOpen(false);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, [menDropdownOpen, womenDropdownOpen]);
-
   const clearFilters = (message: string) => {
     setTimeout(() => {
       setProduct({
@@ -138,9 +102,6 @@ const AddProductForm = () => {
       setSelectedMenSizes([]);
       setSelectedWomenSizes([]);
       setImageFile(null);
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
       setErrorMessage({
         name: false,
         brand: false,
@@ -149,6 +110,9 @@ const AddProductForm = () => {
         size: false,
         image: false,
       });
+      if (fileInputRef.current) {
+        fileInputRef.current.value = "";
+      }
     }, 50);
     alert(message);
   };
@@ -163,7 +127,7 @@ const AddProductForm = () => {
       (selectedMenSizes.length > 0 || selectedWomenSizes.length > 0)
     ) {
       const base64Image = await fileToBase64(imageFile);
-      await fetch("/api/products", {
+      await fetch("/api/add-product", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -213,25 +177,19 @@ const AddProductForm = () => {
               className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
               placeholder="Enter product name"
               value={product.name}
-              onChange={(e) => {
-                setProduct((prev) => {
-                  return { ...prev, name: e.target.value };
-                });
-              }}
+              onChange={(e) =>
+                setProduct((prev) => ({ ...prev, name: e.target.value }))
+              }
               onBlur={() => {
                 if (!product.name) {
-                  return setErrorMessage((prev) => {
-                    return { ...prev, name: true };
-                  });
+                  setErrorMessage((prev) => ({ ...prev, name: true }));
                 }
               }}
             />
             <p
-              className={
-                errorMessage.name && !product.name
-                  ? "mt-1 text-sm text-red-600"
-                  : "hidden mt-1 text-sm text-red-600"
-              }
+              className={`mt-1 text-sm text-red-600 ${
+                errorMessage.name && !product.name ? "" : "hidden"
+              }`}
             >
               Please fill out the product name.
             </p>
@@ -244,76 +202,35 @@ const AddProductForm = () => {
               className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
               placeholder="e.g. Nike"
               value={product.brand}
-              onChange={(e) => {
-                setProduct((prev) => {
-                  return { ...prev, brand: e.target.value };
-                });
-              }}
+              onChange={(e) =>
+                setProduct((prev) => ({ ...prev, brand: e.target.value }))
+              }
               onBlur={() => {
                 if (!product.brand) {
-                  return setErrorMessage((prev) => {
-                    return { ...prev, brand: true };
-                  });
+                  setErrorMessage((prev) => ({ ...prev, brand: true }));
                 }
               }}
             />
             <p
-              className={
-                errorMessage.brand && !product.brand
-                  ? "mt-1 text-sm text-red-600"
-                  : "hidden mt-1 text-sm text-red-600"
-              }
+              className={`mt-1 text-sm text-red-600 ${
+                errorMessage.brand && !product.brand ? "" : "hidden"
+              }`}
             >
               Please fill out the product brand.
             </p>
           </div>
 
-          <div ref={categoryDropdown} className="w-full relative">
-            <label className="block text-sm text-gray-600 mb-1">Category</label>
-
-            <button
-              type="button"
-              onClick={() => setCategoryDropdownOpen((prev) => !prev)}
-              className="w-full bg-white border border-gray-300 rounded-md shadow-sm px-3 py-2 text-left text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            >
-              {product.category || "Select category"}
-              <span className="float-right">
-                <svg
-                  className={`w-5 h-5 inline-block transition-transform ${
-                    categoryDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </span>
-            </button>
-
-            {categoryDropdownOpen && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 shadow-md rounded-md max-h-40 overflow-y-auto text-sm text-gray-700">
-                {categories.map((cat) => (
-                  <li
-                    key={cat}
-                    onClick={() => {
-                      setProduct((prev) => ({ ...prev, category: cat }));
-                      setCategoryDropdownOpen(false);
-                    }}
-                    className={`cursor-pointer px-4 py-2 hover:bg-gray-100 ${
-                      product.category === cat ? "bg-gray-100 font-medium" : ""
-                    }`}
-                  >
-                    {cat}
-                  </li>
-                ))}
-              </ul>
-            )}
+          <div>
+            <Dropdown
+              label="Category"
+              options={categories}
+              selectedOptions={[]}
+              multiSelect={false}
+              singleSelectValue={product.category}
+              onSelectSingle={(value) =>
+                setProduct((prev) => ({ ...prev, category: value }))
+              }
+            />
           </div>
 
           <div>
@@ -323,180 +240,46 @@ const AddProductForm = () => {
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
               placeholder="Enter price"
               value={product.price}
-              onChange={(e) => {
-                setProduct((prev) => {
-                  return { ...prev, price: e.target.value };
-                });
-              }}
+              onChange={(e) =>
+                setProduct((prev) => ({ ...prev, price: e.target.value }))
+              }
               onBlur={() => {
                 if (!product.price) {
-                  return setErrorMessage((prev) => {
-                    return { ...prev, price: true };
-                  });
+                  setErrorMessage((prev) => ({ ...prev, price: true }));
                 }
               }}
             />
             <p
-              className={
-                errorMessage.price && !Number(product.price)
-                  ? "mt-1 text-sm text-red-600"
-                  : "hidden mt-1 text-sm text-red-600"
-              }
+              className={`mt-1 text-sm text-red-600 ${
+                errorMessage.price && !Number(product.price) ? "" : "hidden"
+              }`}
             >
               Please fill out the product price.
             </p>
           </div>
-          <div ref={menDropdown} className="w-full relative">
-            <label className="block text-sm text-gray-600 mb-1">
-              Men&apos;s Sizes
-            </label>
 
-            <div className="flex flex-wrap gap-2 mb-2">
-              {selectedMenSizes.map((size) => (
-                <span
-                  key={size}
-                  className="flex items-center gap-1 bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full"
-                >
-                  {size}
-                  <button
-                    type="button"
-                    onClick={() => toggleMenSize(size)}
-                    className="text-gray-500 hover:text-red-500 text-xs"
-                  >
-                    &times;
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setMenDropdownOpen((prev) => !prev)}
-              className="w-full bg-white border border-gray-300 rounded-md shadow-2xs px-3 py-2 text-left text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            >
-              Select sizes
-              <span className="float-right">
-                <svg
-                  className={`w-5 h-5 inline-block transition-transform ${
-                    menDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </span>
-            </button>
-
-            {menDropdownOpen && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 shadow-sm rounded-md max-h-40 overflow-y-auto text-sm text-gray-700">
-                {menSizes.map((size) => (
-                  <li
-                    key={size}
-                    onClick={() => toggleMenSize(size)}
-                    className={`cursor-pointer select-none px-4 py-2 hover:bg-gray-100 ${
-                      selectedMenSizes.includes(size)
-                        ? "bg-gray-100 font-medium"
-                        : ""
-                    }`}
-                  >
-                    {size}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div ref={womenDropdown} className="w-full relative">
-            <label className="block text-sm text-gray-600 mb-1">
-              Women&apos;s Sizes
-            </label>
-
-            <div className="flex flex-wrap gap-2 mb-2">
-              {selectedWomenSizes.map((size) => (
-                <span
-                  key={size}
-                  className="flex items-center gap-1 bg-gray-200 text-gray-800 text-sm px-2 py-1 rounded-full"
-                >
-                  {size}
-                  <button
-                    type="button"
-                    onClick={() => toggleWomenSize(size)}
-                    className="text-gray-500 hover:text-red-500 text-xs"
-                  >
-                    &times;
-                  </button>
-                </span>
-              ))}
-            </div>
-
-            <button
-              type="button"
-              onClick={() => setWomenDropdownOpen((prev) => !prev)}
-              className="w-full bg-white border border-gray-300 rounded-md shadow-2xs px-3 py-2 text-left text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
-            >
-              Select sizes
-              <span className="float-right">
-                <svg
-                  className={`w-5 h-5 inline-block transition-transform ${
-                    womenDropdownOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M19 9l-7 7-7-7"
-                  />
-                </svg>
-              </span>
-            </button>
-
-            {womenDropdownOpen && (
-              <ul className="absolute z-10 mt-1 w-full bg-white border border-gray-300 shadow-sm rounded-md max-h-40 overflow-y-auto text-sm text-gray-700">
-                {womenSizes.map((size) => (
-                  <li
-                    key={size}
-                    onClick={() => toggleWomenSize(size)}
-                    className={`cursor-pointer select-none px-4 py-2 hover:bg-gray-100 ${
-                      selectedWomenSizes.includes(size)
-                        ? "bg-gray-100 font-medium"
-                        : ""
-                    }`}
-                  >
-                    {size}
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
-
-          <div className="col-span-2">
-            <label className="block text-sm text-gray-600 mb-2">
-              Use square image
-            </label>
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              className="w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:border file:border-gray-300 file:rounded-md file:bg-gray-50 file:text-gray-700 transition duration-300 hover:file:bg-gray-100"
-              onChange={(e) => {
-                const file = e.target.files?.[0];
-                if (file) {
-                  setImageFile(file);
-                }
-              }}
+          <div>
+            <Dropdown
+              label="Men's Sizes"
+              options={menSizes}
+              selectedOptions={selectedMenSizes}
+              onToggleOption={toggleMenSize}
             />
           </div>
+
+          <div>
+            <Dropdown
+              label="Women's Sizes"
+              options={womenSizes}
+              selectedOptions={selectedWomenSizes}
+              onToggleOption={toggleWomenSize}
+            />
+          </div>
+
+          <FileUploader
+            onFileSelect={(file) => setImageFile(file)}
+            ref={fileInputRef}
+          />
           <button
             type="button"
             className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-500 text-white rounded-md transition duration-300 hover:cursor-pointer col-span-2 flex justify-center"
