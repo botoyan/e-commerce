@@ -1,8 +1,10 @@
 "use client";
 import React, { useState } from "react";
 import { FaUserPlus } from "react-icons/fa6";
+import { useRouter } from "next/navigation";
 
 const CreateAccountPage = () => {
+  const router = useRouter();
   const [form, setForm] = useState({
     username: "",
     email: "",
@@ -16,7 +18,20 @@ const CreateAccountPage = () => {
 
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const clearFilters = () => {
+    setForm({
+      username: "",
+      email: "",
+      password: "",
+    });
+    setError({
+      username: false,
+      email: false,
+      password: false,
+    });
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (
@@ -24,15 +39,37 @@ const CreateAccountPage = () => {
       !regexEmail.test(form.email) ||
       form.password.length < 8
     ) {
-      setError({
-        username: form.username.trim().length === 0,
-        email: !regexEmail.test(form.email),
-        password: form.password.length < 8,
-      });
-      return;
+      alert("Please fill out all the forms correctly before submitting!");
+      return clearFilters();
     }
 
-    alert("Account created! (placeholder)");
+    await fetch("/api/sign-up", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        username: form.username,
+        email: form.email,
+        password: form.password,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to add product!");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        clearFilters();
+        console.log(`User created: ${data._id}`);
+        router.push("/sign-in?userCreated=true");
+      })
+      .catch((error) => {
+        alert("Server Error");
+        clearFilters();
+        console.error(`Error: ${error}`);
+      });
   };
 
   return (

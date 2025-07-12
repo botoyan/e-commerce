@@ -21,6 +21,10 @@ const userSchema = new Schema(
       type: String,
       required: true,
     },
+    userType: {
+      type: String,
+      default: "user",
+    },
     orders: [
       {
         type: Schema.Types.ObjectId,
@@ -32,6 +36,5 @@ const userSchema = new Schema(
   { timestamps: true }
 );
 
-const User = (module.exports =
-  mongoose.models.User || mongoose.model("User", userSchema));
+const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;

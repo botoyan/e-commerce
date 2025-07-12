@@ -149,7 +149,7 @@ const AddProductForm = () => {
           return res.json();
         })
         .then((data) => {
-          clearFilters("Product was added successfully!");
+          clearFilters("Product added successfully!");
           console.log(`Product added: ${data._id}`);
         })
         .catch((error) => {

@@ -4,6 +4,17 @@ import Product from "../../../models/Product";
 async function addProduct(req, res) {
   await connectToDatabase();
   if (req.method === "POST") {
+    /**
+     * const session = await getServerSession(req, res, authOptions);
+    if (!session) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const user = await User.findOne({ email: session.user.email });
+    if (!user || user.userType !== "admin") {
+      return res.status(403).json({ message: "Forbidden: Admins only" });
+    }
+     */
     try {
       const { name, brand, category, price, imageURI, menSizes, womenSizes } =
         req.body;
@@ -30,8 +41,8 @@ async function addProduct(req, res) {
       });
     }
   }
-  if (req.method !== "GET" && req.method !== "POST") {
-    res.setHeader("Allow", ["GET", "POST"]);
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
     res.status(405).end(`Method ${req.method} is not allowed!`);
   }
 }
