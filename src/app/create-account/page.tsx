@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 
 const CreateAccountPage = () => {
   const [loading, setLoading] = useState(false);
-  const [userExists, setUserExists] = useState(false);
+  const [userExists, setUserExists] = useState("");
   const router = useRouter();
   const [form, setForm] = useState({
     username: "",
@@ -22,7 +22,7 @@ const CreateAccountPage = () => {
 
   useEffect(() => {
     if (userExists) {
-      const timeout = setTimeout(() => setUserExists(false), 5000);
+      const timeout = setTimeout(() => setUserExists(""), 5000);
       return () => clearTimeout(timeout);
     }
   }, [userExists]);
@@ -65,11 +65,16 @@ const CreateAccountPage = () => {
         password: form.password,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
         if (res.status === 409) {
+          const data = await res.json();
+          if (data.message.includes("Email")) {
+            setUserExists("email");
+          } else if (data.message.includes("Username")) {
+            setUserExists("username");
+          }
           setLoading(false);
-          setUserExists(true);
-          return;
+          return null;
         }
         if (!res.ok) {
           throw new Error("Failed to create an user!");
@@ -77,6 +82,7 @@ const CreateAccountPage = () => {
         return res.json();
       })
       .then((data) => {
+        if (!data) return;
         clearFilters();
         console.log(`User created: ${data._id}`);
         router.push("/sign-in?userCreated=true");
@@ -96,9 +102,14 @@ const CreateAccountPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
-            {userExists && (
+            {userExists === "email" && (
               <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
                 Account already exists with this email. Please log in instead.
+              </div>
+            )}
+            {userExists === "username" && (
+              <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+                Username is already taken. Please Try another one.
               </div>
             )}
             <label className="block text-sm text-gray-600 mb-1">Username</label>

@@ -20,9 +20,20 @@ export default async function handler(req, res) {
       return res.status(400).json({ message: "Missing fields" });
     }
 
+    if (password.length < 8) {
+      return res
+        .status(400)
+        .json({ message: "Password must be at least 8 characters" });
+    }
+
     const existingUser = await User.findOne({ email });
     if (existingUser) {
       return res.status(409).json({ message: "Email already registered" });
+    }
+
+    const existingUsername = await User.findOne({ username });
+    if (existingUsername) {
+      return res.status(409).json({ message: "Username already taken" });
     }
 
     const saltRounds = 12;
