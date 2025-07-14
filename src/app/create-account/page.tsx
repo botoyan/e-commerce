@@ -1,10 +1,11 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 const CreateAccountPage = () => {
   const [loading, setLoading] = useState(false);
+  const [userExists, setUserExists] = useState(false);
   const router = useRouter();
   const [form, setForm] = useState({
     username: "",
@@ -18,6 +19,13 @@ const CreateAccountPage = () => {
   });
 
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+
+  useEffect(() => {
+    if (userExists) {
+      const timeout = setTimeout(() => setUserExists(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [userExists]);
 
   const clearFilters = () => {
     setForm({
@@ -58,6 +66,11 @@ const CreateAccountPage = () => {
       }),
     })
       .then((res) => {
+        if (res.status === 409) {
+          setLoading(false);
+          setUserExists(true);
+          return;
+        }
         if (!res.ok) {
           throw new Error("Failed to create an user!");
         }
@@ -68,11 +81,7 @@ const CreateAccountPage = () => {
         console.log(`User created: ${data._id}`);
         router.push("/sign-in?userCreated=true");
       })
-      .then(() => {
-        setLoading(false);
-      })
       .catch((error) => {
-        alert("Server Error");
         clearFilters();
         console.error(`Error: ${error}`);
       });
@@ -87,6 +96,11 @@ const CreateAccountPage = () => {
 
         <form onSubmit={handleSubmit} className="space-y-5">
           <div>
+            {userExists && (
+              <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+                Account already exists with this email. Please log in instead.
+              </div>
+            )}
             <label className="block text-sm text-gray-600 mb-1">Username</label>
             <input
               autoComplete="off"
@@ -168,6 +182,7 @@ const CreateAccountPage = () => {
 
           <button
             type="submit"
+            disabled={loading}
             className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-800 text-white rounded-md transition-all ease-in-out duration-500 hover:cursor-pointer font-medium"
           >
             Create Account
