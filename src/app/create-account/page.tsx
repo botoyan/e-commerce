@@ -4,6 +4,7 @@ import { FaUserPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
 
 const CreateAccountPage = () => {
+  const [loading, setLoading] = useState(false);
   const router = useRouter();
   const [form, setForm] = useState({
     username: "",
@@ -43,6 +44,8 @@ const CreateAccountPage = () => {
       return clearFilters();
     }
 
+    setLoading(true);
+
     await fetch("/api/sign-up", {
       method: "POST",
       headers: {
@@ -56,7 +59,7 @@ const CreateAccountPage = () => {
     })
       .then((res) => {
         if (!res.ok) {
-          throw new Error("Failed to add product!");
+          throw new Error("Failed to create an user!");
         }
         return res.json();
       })
@@ -64,6 +67,9 @@ const CreateAccountPage = () => {
         clearFilters();
         console.log(`User created: ${data._id}`);
         router.push("/sign-in?userCreated=true");
+      })
+      .then(() => {
+        setLoading(false);
       })
       .catch((error) => {
         alert("Server Error");
@@ -83,6 +89,7 @@ const CreateAccountPage = () => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Username</label>
             <input
+              autoComplete="off"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
               placeholder="e.g. sneakerfan"
@@ -173,6 +180,49 @@ const CreateAccountPage = () => {
           </p>
         </form>
       </div>
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-sm w-full space-y-6">
+            <h2 className="text-2xl font-semibold mb-2 text-blue-700">
+              In process
+            </h2>
+            <input
+              type="text"
+              value={form.email}
+              disabled
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 cursor-not-allowed"
+              aria-label="Email"
+            />
+            <p className="text-gray-600">
+              Processing your request. You will be redirected to the login page
+              shortly.
+            </p>
+            <div className="flex justify-center">
+              <svg
+                className="animate-spin h-8 w-8 text-blue-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

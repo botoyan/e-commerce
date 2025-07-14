@@ -1,5 +1,6 @@
 import connectToDatabase from "../../../lib/mongoose";
 import User from "../../../models/User";
+import { sendWelcomeEmail } from "../../../lib/sendEmail";
 import bcrypt from "bcrypt";
 
 export default async function handler(req, res) {
@@ -11,7 +12,9 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { email, username, password } = req.body;
+    const email = req.body.email?.trim().toLowerCase();
+    const username = req.body.username.trim().toLowerCase();
+    const password = req.body.password;
 
     if (!email || !username || !password) {
       return res.status(400).json({ message: "Missing fields" });
@@ -33,6 +36,8 @@ export default async function handler(req, res) {
     });
 
     await newUser.save();
+
+    await sendWelcomeEmail(email, username);
 
     return res.status(201).json({ message: "User created successfully" });
   } catch (error) {

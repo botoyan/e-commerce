@@ -22,7 +22,7 @@ const SignInPage = () => {
           <FaUserLarge size={90} className="text-gray-600" />
         </div>
         {searchParams?.get("userCreated") === "true" && (
-          <div className="p-3 rounded-full bg-green-200 border-green-400 font-medium text-sm text-green-600 text-center">
+          <div className="p-3 rounded-full bg-green-200 border-green-400 font-medium text-sm text-green-600 text-center mb-2">
             Account was created successfully! Please log in
           </div>
         )}
