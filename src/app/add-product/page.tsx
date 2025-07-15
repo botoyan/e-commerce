@@ -1,5 +1,5 @@
 "use client";
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, FormEvent } from "react";
 import Dropdown from "../_components/dropdown";
 import FileUploader from "../_components/fileUploader";
 
@@ -117,7 +117,8 @@ const AddProductForm = () => {
     alert(message);
   };
 
-  const addProduct = async () => {
+  const addProduct = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
     if (
       product.name.length > 0 &&
       product.brand.length > 0 &&
@@ -167,7 +168,7 @@ const AddProductForm = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
           Add Product
         </h2>
-        <form className="grid grid-cols-2 gap-6">
+        <form className="grid grid-cols-2 gap-6" onSubmit={addProduct}>
           <div>
             <label className="block text-sm text-gray-600 mb-1">
               Product Name
@@ -283,7 +284,6 @@ const AddProductForm = () => {
           <button
             type="button"
             className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-500 text-white rounded-md transition duration-300 hover:cursor-pointer col-span-2 flex justify-center"
-            onClick={addProduct}
           >
             Add Product
           </button>
@@ -294,3 +294,5 @@ const AddProductForm = () => {
 };
 
 export default AddProductForm;
+
+//TODO need to check

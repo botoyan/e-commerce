@@ -153,5 +153,3 @@ const Dropdown: React.FC<dropdownProps> = ({
 };
 
 export default Dropdown;
-
-//TODO need to finish this

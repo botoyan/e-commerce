@@ -1,18 +1,51 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, FormEvent, useEffect } from "react";
 import { FaUserLarge } from "react-icons/fa6";
 import { useSearchParams } from "next/navigation";
+import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 const SignInPage = () => {
+  const router = useRouter();
   const searchParams = useSearchParams();
+  const userCreated = searchParams?.get("userCreated") === "true";
+  const [accountCreated, setAccountCreated] = useState(userCreated);
+  const [loading, setLoading] = useState(false);
+  const [handleError, setHandleError] = useState("none");
   const [form, setForm] = useState({ email: "", password: "" });
   const [error, setError] = useState({ email: false, password: false });
   const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  useEffect(() => {
+    if (handleError === "wrongSubmit" || handleError === "wrongCredentials") {
+      const timeout = setTimeout(() => setHandleError("none"), 5000);
+      return () => clearTimeout(timeout);
+    }
+    if (accountCreated) {
+      setAccountCreated(true);
+      const timeout = setTimeout(() => setAccountCreated(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [handleError, accountCreated]);
 
-    alert("Signed in");
+  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (!regexEmail.test(form.email) || form.password.length < 8) {
+      return setHandleError("wrongSubmit");
+    }
+    setLoading(true);
+    const res = await signIn("credentials", {
+      redirect: false,
+      email: form.email,
+      password: form.password,
+    });
+
+    if (res?.error) {
+      setLoading(false);
+      setHandleError("wrongCredentials");
+    } else {
+      router.push("/");
+    }
   };
 
   return (
@@ -21,9 +54,19 @@ const SignInPage = () => {
         <div className="flex items-center justify-center mb-6">
           <FaUserLarge size={90} className="text-gray-600" />
         </div>
-        {searchParams?.get("userCreated") === "true" && (
+        {accountCreated && (
           <div className="p-3 rounded-full bg-green-200 border-green-400 font-medium text-sm text-green-600 text-center mb-2">
             Account was created successfully! Please log in
+          </div>
+        )}
+        {handleError === "wrongSubmit" && (
+          <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+            Please fill out all the forms correctly before submitting!
+          </div>
+        )}
+        {handleError === "wrongCredentials" && (
+          <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+            Invalid email or password. Please try again.
           </div>
         )}
 
@@ -107,6 +150,49 @@ const SignInPage = () => {
           </p>
         </form>
       </div>
+      {loading && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
+          <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-sm w-full space-y-6">
+            <h2 className="text-2xl font-semibold mb-2 text-blue-700">
+              In process
+            </h2>
+            <input
+              type="text"
+              value={form.email}
+              disabled
+              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 cursor-not-allowed"
+              aria-label="Email"
+            />
+            <p className="text-gray-600">
+              Processing your request. You will be redirected to the login page
+              shortly.
+            </p>
+            <div className="flex justify-center">
+              <svg
+                className="animate-spin h-8 w-8 text-blue-600"
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                aria-hidden="true"
+              >
+                <circle
+                  className="opacity-25"
+                  cx="12"
+                  cy="12"
+                  r="10"
+                  stroke="currentColor"
+                  strokeWidth="4"
+                ></circle>
+                <path
+                  className="opacity-75"
+                  fill="currentColor"
+                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
+                ></path>
+              </svg>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 };

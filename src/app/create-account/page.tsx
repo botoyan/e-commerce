@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 const CreateAccountPage = () => {
   const [loading, setLoading] = useState(false);
   const [userExists, setUserExists] = useState("");
+  const [submitError, setSubmitError] = useState(false);
   const router = useRouter();
   const [form, setForm] = useState({
     username: "",
@@ -25,7 +26,11 @@ const CreateAccountPage = () => {
       const timeout = setTimeout(() => setUserExists(""), 5000);
       return () => clearTimeout(timeout);
     }
-  }, [userExists]);
+    if (submitError) {
+      const timeout = setTimeout(() => setSubmitError(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [userExists, submitError]);
 
   const clearFilters = () => {
     setForm({
@@ -48,7 +53,7 @@ const CreateAccountPage = () => {
       !regexEmail.test(form.email) ||
       form.password.length < 8
     ) {
-      alert("Please fill out all the forms correctly before submitting!");
+      setSubmitError(true);
       return clearFilters();
     }
 
@@ -110,6 +115,11 @@ const CreateAccountPage = () => {
             {userExists === "username" && (
               <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
                 Username is already taken. Please Try another one.
+              </div>
+            )}
+            {submitError && (
+              <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+                Please fill out all the forms correctly before submitting!
               </div>
             )}
             <label className="block text-sm text-gray-600 mb-1">Username</label>

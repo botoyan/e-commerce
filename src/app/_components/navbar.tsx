@@ -4,6 +4,7 @@ import Image from "next/image";
 import sneakersIcon from "../../../public/assets/images/icon.jpeg";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
+import { signOut, useSession } from "next-auth/react";
 
 type NavbarProps = {
   openMenu: boolean;
@@ -11,6 +12,7 @@ type NavbarProps = {
 };
 
 function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
+  const data = useSession();
   return (
     <nav className="bg-black border-b-1 border-b-white">
       <div className="mx-auto max-w-10xl px-2 sm:px-6 lg:px-7">
@@ -74,16 +76,26 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                 </a>
                 <a
                   href="#"
-                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
+                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                 >
                   New
                 </a>
-                <a
-                  href="#"
-                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
-                >
-                  Sign In
-                </a>
+                {data.status === "authenticated" ? (
+                  <a
+                    href="#"
+                    onClick={() => signOut()}
+                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                  >
+                    Sign Out
+                  </a>
+                ) : (
+                  <a
+                    href="/sign-in"
+                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                  >
+                    Sign In
+                  </a>
+                )}
               </div>
             </div>
           </div>
@@ -129,12 +141,22 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
           >
             New
           </a>
-          <a
-            href="#"
-            className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
-          >
-            Sign In
-          </a>
+          {data.status === "authenticated" ? (
+            <a
+              href="#"
+              onClick={() => signOut()}
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+            >
+              Sign Out
+            </a>
+          ) : (
+            <a
+              href="/sign-in"
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+            >
+              Sign In
+            </a>
+          )}
         </div>
       </div>
     </nav>

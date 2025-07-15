@@ -1,43 +1,12 @@
 import NextAuth from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import User from "../../../models/User";
+import Credentials from "next-auth/providers/credentials";
 import bcrypt from "bcrypt";
+import User from "../../../models/User";
 import connectToDatabase from "../../../lib/mongoose";
 
-declare module "next-auth" {
-  interface Session {
-    user: {
-      id: string;
-      username: string;
-      userType: string;
-      email?: string | null;
-      name?: string | null;
-      image?: string | null;
-    };
-  }
-
-  interface User {
-    id: string;
-    username: string;
-    userType: string;
-  }
-}
-
-declare module "next-auth/jwt" {
-  interface JWT {
-    id: string;
-    username: string;
-    userType: string;
-  }
-}
-
-type VerifyUserParams = {
-  email: string;
-  password: string;
-};
-
-async function verifyUser({ email, password }: VerifyUserParams) {
+async function verifyUser({ email, password }) {
   await connectToDatabase();
+
   const user = await User.findOne({ email });
   if (!user) return null;
 
@@ -54,7 +23,7 @@ async function verifyUser({ email, password }: VerifyUserParams) {
 
 export default NextAuth({
   providers: [
-    CredentialsProvider({
+    Credentials({
       name: "Credentials",
       credentials: {
         email: { label: "Email", type: "email" },
@@ -62,18 +31,21 @@ export default NextAuth({
       },
       async authorize(credentials) {
         if (!credentials) return null;
+
         const user = await verifyUser({
           email: credentials.email,
           password: credentials.password,
         });
+
         if (!user) return null;
         return user;
       },
     }),
   ],
+
   session: {
-    strategy: "jwt",
-    maxAge: 7 * 24 * 60 * 60,
+    strategy: "jwt", // use JWTs, not database sessions
+    maxAge: 7 * 24 * 60 * 60, // session is valid for 7 days
   },
   callbacks: {
     async jwt({ token, user }) {
@@ -85,7 +57,7 @@ export default NextAuth({
       return token;
     },
     async session({ session, token }) {
-      if (token && session.user) {
+      if (session.user) {
         session.user.id = token.id;
         session.user.username = token.username;
         session.user.userType = token.userType;
