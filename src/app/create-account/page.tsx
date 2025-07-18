@@ -2,8 +2,10 @@
 import React, { useState, useEffect } from "react";
 import { FaUserPlus } from "react-icons/fa6";
 import { useRouter } from "next/navigation";
+import LoadingFetch from "../_components/loadingFetch";
+import Link from "next/link";
 
-const CreateAccountPage = () => {
+const CreateAccount = () => {
   const [loading, setLoading] = useState(false);
   const [userExists, setUserExists] = useState("");
   const [submitError, setSubmitError] = useState(false);
@@ -45,7 +47,7 @@ const CreateAccountPage = () => {
     });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
     if (
@@ -59,7 +61,7 @@ const CreateAccountPage = () => {
 
     setLoading(true);
 
-    await fetch("/api/sign-up", {
+    fetch("/api/sign-up", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -89,8 +91,7 @@ const CreateAccountPage = () => {
       .then((data) => {
         if (!data) return;
         clearFilters();
-        console.log(`User created: ${data._id}`);
-        router.push("/sign-in?userCreated=true");
+        router.replace("/sign-in?userCreated=true");
       })
       .catch((error) => {
         clearFilters();
@@ -210,57 +211,19 @@ const CreateAccountPage = () => {
           </button>
 
           <p className="text-center text-sm text-gray-600 hover:underline hover:cursor-pointer transition-all ease-in-out duration-500 hover:text-gray-800">
-            <a href="/sign-in" className="text-gray-800">
+            <Link href="/sign-in" className="text-gray-800">
               Already have an account? Sign in
-            </a>
+            </Link>
           </p>
         </form>
       </div>
-      {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-sm w-full space-y-6">
-            <h2 className="text-2xl font-semibold mb-2 text-blue-700">
-              In process
-            </h2>
-            <input
-              type="text"
-              value={form.email}
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 cursor-not-allowed"
-              aria-label="Email"
-            />
-            <p className="text-gray-600">
-              Processing your request. You will be redirected to the login page
-              shortly.
-            </p>
-            <div className="flex justify-center">
-              <svg
-                className="animate-spin h-8 w-8 text-blue-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-      )}
+      <LoadingFetch
+        loading={loading}
+        text="Processing your request. You will be redirected to the login page shortly."
+        inputText={form.email}
+      />
     </div>
   );
 };
 
-export default CreateAccountPage;
+export default CreateAccount;

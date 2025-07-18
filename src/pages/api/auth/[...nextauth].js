@@ -44,8 +44,8 @@ export default NextAuth({
   ],
 
   session: {
-    strategy: "jwt", // use JWTs, not database sessions
-    maxAge: 7 * 24 * 60 * 60, // session is valid for 7 days
+    strategy: "jwt",
+    maxAge: 7 * 24 * 60 * 60,
   },
   callbacks: {
     async jwt({ token, user }) {

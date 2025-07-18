@@ -5,6 +5,7 @@ import sneakersIcon from "../../../public/assets/images/icon.jpeg";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
+import Link from "next/link";
 
 type NavbarProps = {
   openMenu: boolean;
@@ -68,33 +69,33 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                   alt="sneakers-icon"
                   style={{ height: "auto" }}
                 />
-                <a
+                <Link
                   href="#"
                   className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
                 >
                   Shop
-                </a>
-                <a
+                </Link>
+                <Link
                   href="#"
                   className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                 >
                   New
-                </a>
+                </Link>
                 {data.status === "authenticated" ? (
-                  <a
+                  <Link
                     href="#"
                     onClick={() => signOut()}
                     className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                   >
                     Sign Out
-                  </a>
+                  </Link>
                 ) : (
-                  <a
+                  <Link
                     href="/sign-in"
                     className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                   >
                     Sign In
-                  </a>
+                  </Link>
                 )}
               </div>
             </div>
@@ -128,34 +129,34 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
       </div>
       <div className={openMenu ? "md:hidden" : "hidden"} id="mobile-menu">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          <a
+          <Link
             href="#"
             className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             aria-current="page"
           >
             Shop
-          </a>
-          <a
+          </Link>
+          <Link
             href="#"
             className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 "
           >
             New
-          </a>
+          </Link>
           {data.status === "authenticated" ? (
-            <a
+            <Link
               href="#"
               onClick={() => signOut()}
               className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
             >
               Sign Out
-            </a>
+            </Link>
           ) : (
-            <a
+            <Link
               href="/sign-in"
               className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
             >
               Sign In
-            </a>
+            </Link>
           )}
         </div>
       </div>

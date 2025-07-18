@@ -4,8 +4,10 @@ import { FaUserLarge } from "react-icons/fa6";
 import { useSearchParams } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
+import LoadingFetch from "../_components/loadingFetch";
 
-const SignInPage = () => {
+const SignIn = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const userCreated = searchParams?.get("userCreated") === "true";
@@ -77,17 +79,18 @@ const SignInPage = () => {
               type="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
               placeholder="you@example.com"
+              autoComplete="email"
               value={form.email}
               onChange={(e) => {
                 setForm({ ...form, email: e.target.value });
-                if (regexEmail.test(form.email)) {
+                if (regexEmail.test(e.target.value)) {
                   setError({ ...error, email: false });
                 } else {
                   setError({ ...error, email: true });
                 }
               }}
-              onBlur={() => {
-                if (!regexEmail.test(form.email)) {
+              onBlur={(e) => {
+                if (!regexEmail.test(e.target.value)) {
                   setError({ ...error, email: true });
                 } else {
                   setError({ ...error, email: false });
@@ -107,17 +110,18 @@ const SignInPage = () => {
               type="password"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition"
               placeholder="••••••••"
+              autoComplete="current-password"
               value={form.password}
               onChange={(e) => {
                 setForm({ ...form, password: e.target.value });
-                if (form.password.length > 7) {
+                if (e.target.value.length > 7) {
                   setError({ ...error, password: false });
                 } else {
                   setError({ ...error, password: false });
                 }
               }}
-              onBlur={() => {
-                if (form.password.length > 7) {
+              onBlur={(e) => {
+                if (e.target.value.length > 7) {
                   setError({ ...error, password: false });
                 } else {
                   setError({ ...error, password: true });
@@ -130,12 +134,12 @@ const SignInPage = () => {
           </div>
 
           <div className="text-right">
-            <a
+            <Link
               href="/forgot-password"
               className="text-sm text-gray-600 hover:text-gray-800 hover:underline"
             >
               Forgot password?
-            </a>
+            </Link>
           </div>
 
           <button
@@ -146,59 +150,22 @@ const SignInPage = () => {
           </button>
 
           <p className="text-center text-sm text-gray-600 hover:underline hover:cursor-pointer hover:text-gray-800">
-            <a href="/create-account">Don&apos;t have an account? Create one</a>
+            <Link
+              href="/create-account"
+              className="text-center text-sm text-gray-600 hover:underline hover:text-gray-800"
+            >
+              Don&apos;t have an account? Create one
+            </Link>
           </p>
         </form>
       </div>
-      {loading && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-gray-400 bg-opacity-50">
-          <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-sm w-full space-y-6">
-            <h2 className="text-2xl font-semibold mb-2 text-blue-700">
-              In process
-            </h2>
-            <input
-              type="text"
-              value={form.email}
-              disabled
-              className="w-full px-4 py-2 border border-gray-300 rounded-md text-gray-800 cursor-not-allowed"
-              aria-label="Email"
-            />
-            <p className="text-gray-600">
-              Processing your request. You will be redirected to the login page
-              shortly.
-            </p>
-            <div className="flex justify-center">
-              <svg
-                className="animate-spin h-8 w-8 text-blue-600"
-                xmlns="http://www.w3.org/2000/svg"
-                fill="none"
-                viewBox="0 0 24 24"
-                aria-hidden="true"
-              >
-                <circle
-                  className="opacity-25"
-                  cx="12"
-                  cy="12"
-                  r="10"
-                  stroke="currentColor"
-                  strokeWidth="4"
-                ></circle>
-                <path
-                  className="opacity-75"
-                  fill="currentColor"
-                  d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"
-                ></path>
-              </svg>
-            </div>
-          </div>
-        </div>
-      )}
+      <LoadingFetch
+        loading={loading}
+        text="Processing your request. You will be redirected to the main page shortly."
+        inputText={form.email}
+      />
     </div>
   );
 };
 
-export default SignInPage;
-
-//TODO need to implement sign-in functionality and backend logic for user
-//TODO need to implement forgot-password functionality and backend logic for user
-//TODO need to implement create-account functionality and backend logic for user
+export default SignIn;

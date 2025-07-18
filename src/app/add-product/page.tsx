@@ -1,9 +1,12 @@
 "use client";
-import React, { useState, useRef, FormEvent } from "react";
+import React, { useState, useRef } from "react";
 import Dropdown from "../_components/dropdown";
 import FileUploader from "../_components/fileUploader";
+import { useRouter } from "next/navigation";
+import LoadingFetch from "../_components/loadingFetch";
 
 const AddProductForm = () => {
+  const router = useRouter();
   const menSizes: string[] = [
     "6",
     "6.5",
@@ -52,6 +55,8 @@ const AddProductForm = () => {
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedMenSizes, setSelectedMenSizes] = useState<string[]>([]);
   const [selectedWomenSizes, setSelectedWomenSizes] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [errorMessage, setErrorMessage] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const toggleMenSize = (size: string) => {
@@ -71,7 +76,7 @@ const AddProductForm = () => {
     price: "",
     size: "",
   });
-  const [errorMessage, setErrorMessage] = useState({
+  const [error, setError] = useState({
     name: false,
     brand: false,
     category: false,
@@ -90,76 +95,77 @@ const AddProductForm = () => {
     });
   };
 
-  const clearFilters = (message: string) => {
-    setTimeout(() => {
-      setProduct({
-        name: "",
-        brand: "",
-        category: "",
-        price: "",
-        size: "",
-      });
-      setSelectedMenSizes([]);
-      setSelectedWomenSizes([]);
-      setImageFile(null);
-      setErrorMessage({
-        name: false,
-        brand: false,
-        category: false,
-        price: false,
-        size: false,
-        image: false,
-      });
-      if (fileInputRef.current) {
-        fileInputRef.current.value = "";
-      }
-    }, 50);
-    alert(message);
+  const clearFilters = () => {
+    setProduct({
+      name: "",
+      brand: "",
+      category: "",
+      price: "",
+      size: "",
+    });
+    setSelectedMenSizes([]);
+    setSelectedWomenSizes([]);
+    setImageFile(null);
+    setError({
+      name: false,
+      brand: false,
+      category: false,
+      price: false,
+      size: false,
+      image: false,
+    });
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
   };
 
-  const addProduct = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
+  const addProduct = async () => {
     if (
-      product.name.length > 0 &&
-      product.brand.length > 0 &&
-      product.category.length > 0 &&
-      product.price.length > 0 &&
-      imageFile !== null &&
-      (selectedMenSizes.length > 0 || selectedWomenSizes.length > 0)
+      product.name.length === 0 ||
+      product.brand.length === 0 ||
+      product.category.length === 0 ||
+      product.price.length === 0 ||
+      imageFile === null ||
+      (selectedMenSizes.length === 0 && selectedWomenSizes.length === 0)
     ) {
-      const base64Image = await fileToBase64(imageFile);
-      await fetch("/api/add-product", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name: product.name,
-          brand: product.brand,
-          category: product.category,
-          price: Number(product.price),
-          imageURI: base64Image,
-          menSizes: selectedMenSizes,
-          womenSizes: selectedWomenSizes,
-        }),
-      })
-        .then((res) => {
-          if (!res.ok) {
-            throw new Error("Failed to add product!");
-          }
-          return res.json();
-        })
-        .then((data) => {
-          clearFilters("Product added successfully!");
-          console.log(`Product added: ${data._id}`);
-        })
-        .catch((error) => {
-          clearFilters("Server Error");
-          console.error(`Error: ${error}`);
-        });
-    } else {
-      clearFilters("Please fill out all the forms before submitting!");
+      setErrorMessage("Please fill out all the information before submitting.");
+      return clearFilters();
     }
+    setLoading(true);
+    const base64Image = await fileToBase64(imageFile);
+    await fetch("/api/add-product", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name: product.name,
+        brand: product.brand,
+        category: product.category,
+        price: Number(product.price),
+        imageURI: base64Image,
+        menSizes: selectedMenSizes,
+        womenSizes: selectedWomenSizes,
+      }),
+    })
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Failed to add product");
+        }
+        return res.json();
+      })
+      .then((data) => {
+        if (!data) return;
+        clearFilters();
+        router.push("/");
+      })
+      .catch((error) => {
+        setErrorMessage(
+          "Server is experiencing some errors, please try again."
+        );
+        clearFilters();
+        console.error(`Error: ${error}`);
+      });
   };
 
   return (
@@ -168,7 +174,12 @@ const AddProductForm = () => {
         <h2 className="text-2xl font-semibold text-gray-800 mb-4 text-center">
           Add Product
         </h2>
-        <form className="grid grid-cols-2 gap-6" onSubmit={addProduct}>
+        {errorMessage && (
+          <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+            {errorMessage}
+          </div>
+        )}
+        <form className="grid grid-cols-2 gap-6">
           <div>
             <label className="block text-sm text-gray-600 mb-1">
               Product Name
@@ -183,13 +194,13 @@ const AddProductForm = () => {
               }
               onBlur={() => {
                 if (!product.name) {
-                  setErrorMessage((prev) => ({ ...prev, name: true }));
+                  setError((prev) => ({ ...prev, name: true }));
                 }
               }}
             />
             <p
               className={`mt-1 text-sm text-red-600 ${
-                errorMessage.name && !product.name ? "" : "hidden"
+                error.name && !product.name ? "" : "hidden"
               }`}
             >
               Please fill out the product name.
@@ -208,13 +219,13 @@ const AddProductForm = () => {
               }
               onBlur={() => {
                 if (!product.brand) {
-                  setErrorMessage((prev) => ({ ...prev, brand: true }));
+                  setError((prev) => ({ ...prev, brand: true }));
                 }
               }}
             />
             <p
               className={`mt-1 text-sm text-red-600 ${
-                errorMessage.brand && !product.brand ? "" : "hidden"
+                error.brand && !product.brand ? "" : "hidden"
               }`}
             >
               Please fill out the product brand.
@@ -246,13 +257,13 @@ const AddProductForm = () => {
               }
               onBlur={() => {
                 if (!product.price) {
-                  setErrorMessage((prev) => ({ ...prev, price: true }));
+                  setError((prev) => ({ ...prev, price: true }));
                 }
               }}
             />
             <p
               className={`mt-1 text-sm text-red-600 ${
-                errorMessage.price && !Number(product.price) ? "" : "hidden"
+                error.price && !Number(product.price) ? "" : "hidden"
               }`}
             >
               Please fill out the product price.
@@ -283,16 +294,20 @@ const AddProductForm = () => {
           />
           <button
             type="button"
+            onClick={addProduct}
             className="w-full py-2 px-4 bg-gray-700 hover:bg-gray-500 text-white rounded-md transition duration-300 hover:cursor-pointer col-span-2 flex justify-center"
           >
             Add Product
           </button>
         </form>
       </div>
+      <LoadingFetch
+        loading={loading}
+        text="Processing your request. You will be redirected to the main page shortly."
+        inputText={product.name}
+      />
     </div>
   );
 };
 
 export default AddProductForm;
-
-//TODO need to check
