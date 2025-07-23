@@ -13,7 +13,6 @@ export default async function handler(req, res) {
 
   try {
     const email = req.body.email?.trim().toLowerCase();
-
     if (!email) {
       return res.status(400).json({ message: "Missing field" });
     }

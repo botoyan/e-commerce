@@ -36,13 +36,13 @@ function ResetPassword() {
     }
 
     setLoading(true);
-    fetch("/api/auth/reset-password", {
+    fetch("/api/reset-password", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        token,
+        token: token,
         password: password,
       }),
     })
@@ -50,12 +50,22 @@ function ResetPassword() {
         if (!res.ok) {
           throw new Error("Something went wrong");
         }
+        return res.json();
       })
-      .then(() => {
+      .then((data) => {
+        if (
+          data.message ===
+          "New password cannot be the same as the old password."
+        ) {
+          setErrorMessage("New password cannot be the same as the old one.");
+          return;
+        }
         router.push("/sign-in");
       })
       .catch((error) => {
         console.error(`Error: ${error}`);
+        setConfirmPassword("");
+        setPassword("");
         setErrorMessage("Failed to reset password. Please try again.");
       })
       .finally(() => setLoading(false));

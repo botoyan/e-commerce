@@ -2,7 +2,7 @@ import connectToDatabase from "../../../lib/mongoose";
 import User from "../../../models/User";
 import crypto from "crypto";
 import bcrypt from "bcrypt";
-import { sendPasswordChangeEmail } from "../../../lib/emails/resetPassword";
+import sendPasswordChangeEmail from "../../../lib/emails/resetPassword";
 
 export default async function handler(req, res) {
   await connectToDatabase();
@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
   try {
     const { token, password } = req.body;
-    if (!token || !password || password.length < 8) {
+    if (!token || password.length < 8) {
       return res
         .status(400)
         .json({ message: "Missing token or invalid password." });
@@ -24,6 +24,12 @@ export default async function handler(req, res) {
     });
     if (!user) {
       return res.status(400).json({ message: "Invalid or expired token." });
+    }
+    const isSamePassword = await bcrypt.compare(password, user.password);
+    if (isSamePassword) {
+      return res.status(200).json({
+        message: "New password cannot be the same as the old password.",
+      });
     }
     const hashedPassword = await bcrypt.hash(password, 12);
     user.password = hashedPassword;
