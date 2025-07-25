@@ -146,14 +146,14 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
             <Link
               href="#"
               onClick={() => signOut()}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             >
               Sign Out
             </Link>
           ) : (
             <Link
               href="/sign-in"
-              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             >
               Sign In
             </Link>

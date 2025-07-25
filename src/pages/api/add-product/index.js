@@ -1,11 +1,11 @@
 import connectToDatabase from "../../../lib/mongoose";
 import Product from "../../../models/Product";
+import User from "../../../models/User";
 
 async function addProduct(req, res) {
   await connectToDatabase();
   if (req.method === "POST") {
-    /**
-     * const session = await getServerSession(req, res, authOptions);
+    const session = await getServerSession(req, res, authOptions);
     if (!session) {
       return res.status(401).json({ message: "Unauthorized" });
     }
@@ -14,7 +14,6 @@ async function addProduct(req, res) {
     if (!user || user.userType !== "admin") {
       return res.status(403).json({ message: "Forbidden: Admins only" });
     }
-     */
     try {
       const { name, brand, category, price, imageURI, menSizes, womenSizes } =
         req.body;

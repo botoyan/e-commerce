@@ -258,12 +258,44 @@ function Sidebar({
 
       <div className="mt-auto space-y-2">
         <button
-          className="w-full px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-400 hover:cursor-pointer transition delay-100 duration-300 ease-in-out"
           onClick={applyFilters}
+          className="relative flex items-center justify-center gap-2 w-full bg-black text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-800 hover:-translate-y-0.5 active:scale-95 transition duration-300 hover:cursor-pointer"
         >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-5 h-5"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            strokeWidth={2}
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2a1 1 0 01-.293.707l-6.414 6.414A1 1 0 0014 13v4.586a1 1 0 01-.293.707l-2 2A1 1 0 0110 20v-7a1 1 0 00-.293-.707L3.293 6.707A1 1 0 013 6V4z"
+            />
+          </svg>
           Apply Filters
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+            3
+          </span>
         </button>
-        <button className="w-full px-4 py-2 bg-gray-100 text-gray-800 rounded hover:bg-gray-300 hover:cursor-pointer transition delay-100 duration-300 ease-in-out">
+
+        <button className="flex items-center justify-center w-full gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-200 hover:text-black transition-all duration-300 ease-in-out hover:cursor-pointer">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            className="w-4 h-4"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              strokeWidth={2}
+              d="M6 18L18 6M6 6l12 12"
+            />
+          </svg>
           Clear Filters
         </button>
       </div>

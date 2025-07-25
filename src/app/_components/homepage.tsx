@@ -143,31 +143,83 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
-              {Array.from({ length: 24 }).map((_, idx) => (
-                <motion.div
-                  key={idx}
-                  initial={{ opacity: 1, scale: 0.95 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ duration: 0.5, delay: idx * 0.05 }}
-                  className="bg-white rounded-2xl shadow-md p-4 hover:shadow-xl transition"
-                >
-                  <Image
-                    src={images[idx % images.length]}
-                    alt="Product"
-                    className="rounded-xl mb-4 w-full object-cover"
-                    style={{ height: "295px", width: "100%" }}
-                  />
-                  <h3 className="text-xl font-semibold hover:cursor-pointer">
-                    Brand Shoe #{idx + 1}
-                  </h3>
-                  <p className="text-gray-600">$99.99</p>
-                  <button className="mt-4 w-full bg-black text-white py-2 rounded-xl transition hover:cursor-pointer">
-                    View Details
-                  </button>
-                </motion.div>
-              ))}
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 px-4">
+              {Array.from({ length: 24 }).map((_, idx) => {
+                const categories = [
+                  "Basketball",
+                  "Football",
+                  "Lifestyle",
+                  "Running",
+                ];
+                const taglines = [
+                  "High-performance shoes built for agility and comfort.",
+                  "Designed for precision and speed on the court.",
+                  "Engineered for elite-level footwork.",
+                  "Sleek design meets responsive traction.",
+                  "Dominate the pitch with explosive agility.",
+                  "Everyday comfort with athletic edge.",
+                  "Lightweight runners with bounce in every step.",
+                  "Elite grip for game-changing moments.",
+                  "Train harder, move faster, play better.",
+                  "Iconic style with breathable materials.",
+                  "Game-ready build with pro-level cushioning.",
+                  "For ballers who never slow down.",
+                  "Where lifestyle and sport collide.",
+                  "Built for sprints, cuts, and sharp turns.",
+                  "Cushioned support that lasts all day.",
+                  "Style that performs beyond the court.",
+                  "Minimalist look. Maximum output.",
+                  "Get that street-ready, gym-capable feel.",
+                  "Versatile kicks for sport and street.",
+                  "Power your pace with performance mesh.",
+                ];
+                const category = categories[idx % categories.length];
+                const tagline = taglines[idx % taglines.length];
+
+                return (
+                  <motion.div
+                    key={idx}
+                    initial={{ opacity: 1, scale: 0.95 }}
+                    whileInView={{ opacity: 1, scale: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ duration: 0.4, delay: idx * 0.03 }}
+                    className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between"
+                  >
+                    {/* Category Label */}
+                    <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
+                      {category}
+                    </span>
+
+                    {/* Product Image */}
+                    <Image
+                      src={images[idx % images.length]}
+                      alt={`Product ${idx + 1}`}
+                      className="rounded-xl object-cover aspect-square w-full mb-4"
+                      width={295}
+                      height={295}
+                    />
+
+                    {/* Product Info */}
+                    <div className="flex flex-col flex-grow justify-between">
+                      <div className="flex justify-between items-center mb-2">
+                        <h3 className="text-lg font-semibold text-gray-800 truncate hover:cursor-pointer">
+                          Brand Shoe #{idx + 1}
+                        </h3>
+                        <span className="text-gray-700 font-medium">
+                          $99.99
+                        </span>
+                      </div>
+
+                      <p className="text-sm text-gray-500 mb-4">{tagline}</p>
+
+                      {/* View Details Button */}
+                      <button className="w-full mt-auto bg-black hover:bg-gray-800 text-white py-2 rounded-xl font-medium transition hover:cursor-pointer">
+                        View Details
+                      </button>
+                    </div>
+                  </motion.div>
+                );
+              })}
             </div>
           </section>
         </div>
