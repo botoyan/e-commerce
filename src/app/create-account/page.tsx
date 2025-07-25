@@ -103,7 +103,7 @@ const CreateAccount = () => {
     <div className="min-h-[90vh] flex items-center justify-center px-4 py-16 bg-gray-50">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 sm:p-8">
         <div className="flex items-center justify-center mb-6">
-          <FaUserPlus size={110} className="text-gray-600" />
+          <FaUserPlus size={110} color="#4f46e5" />
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-5">
@@ -205,13 +205,13 @@ const CreateAccount = () => {
           <button
             type="submit"
             disabled={loading}
-            className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-800 text-white rounded-md transition-all ease-in-out duration-500 hover:cursor-pointer font-medium"
+            className="w-full py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all ease-in-out duration-500 hover:cursor-pointer font-semibold"
           >
             Create Account
           </button>
 
-          <p className="text-center text-sm text-gray-600 hover:underline hover:cursor-pointer transition-all ease-in-out duration-500 hover:text-gray-800">
-            <Link href="/sign-in" className="text-gray-800">
+          <p className="text-center text-sm text-gray-500 hover:underline hover:cursor-pointer transition-all ease-in-out duration-500 hover:text-gray-800">
+            <Link href="/sign-in" className="text-gray-500">
               Already have an account? Sign in
             </Link>
           </p>

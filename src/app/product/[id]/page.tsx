@@ -1,5 +1,4 @@
 "use client";
-
 import React from "react";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -51,6 +50,8 @@ export default function ProductPage({ params }: Props) {
 
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
+  const [menSize, setMenSize] = useState<number[]>([]);
+  const [womenSize, setWomenSize] = useState<number[]>([]);
 
   useEffect(() => {
     const found = products.find((p) => p.id === id);
@@ -63,10 +64,23 @@ export default function ProductPage({ params }: Props) {
 
   if (!product) return null;
 
+  const updatePrice = () => {
+    const totalPrice = Number(product.price.toFixed(2));
+    if (menSize.length === 0 && womenSize.length === 0) {
+      return totalPrice;
+    }
+    if (menSize.length === 0) {
+      return totalPrice * womenSize.length;
+    }
+    if (womenSize.length === 0) {
+      return totalPrice * menSize.length;
+    }
+    return (totalPrice * (womenSize.length + menSize.length)).toFixed(2);
+  };
+
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-12 flex flex-col items-center">
-      <div className="bg-white p-8 rounded-xl shadow-md max-w-5xl w-full flex flex-col md:flex-row gap-12">
-        {/* Left - Smaller Product Image */}
+    <div className="min-h-screen bg-gray-50 px-6 py-12 flex flex-col items-center shadow-md hover:shadow-lg transition-shadow">
+      <div className="bg-white p-8 rounded-xl shadow-md hover:shadow-lg transition-shadow max-w-5xl w-full flex flex-col md:flex-row gap-12">
         <div className="flex-shrink-0 w-full md:w-[400px] flex justify-center">
           <Image
             src={product.image}
@@ -77,7 +91,6 @@ export default function ProductPage({ params }: Props) {
           />
         </div>
 
-        {/* Right - Sizes, Button, Details */}
         <div className="flex flex-col justify-between flex-grow">
           <div>
             <h1 className="text-3xl font-semibold mb-8">{product.name}</h1>
@@ -89,8 +102,23 @@ export default function ProductPage({ params }: Props) {
               <div className="grid grid-cols-5 gap-3">
                 {menSizes.map((size) => (
                   <div
+                    onClick={() => {
+                      setMenSize((prev) => {
+                        if ([...prev].includes(Number(size))) {
+                          return [...prev].filter((item) => {
+                            return item !== Number(size);
+                          });
+                        } else {
+                          return [...prev, Number(size)];
+                        }
+                      });
+                    }}
                     key={`men-${size}`}
-                    className="border border-gray-300 rounded-md py-2 text-center text-gray-700 cursor-pointer hover:bg-gray-200 transition"
+                    className={
+                      menSize.includes(Number(size))
+                        ? "border border-gray-300 rounded-md py-2 text-center text-white cursor-pointer hover:bg-gray-700 transition bg-gray-900"
+                        : "border border-gray-200 rounded-md py-2 text-center text-gray-800 cursor-pointer hover:bg-gray-100 transition"
+                    }
                   >
                     {size}
                   </div>
@@ -105,8 +133,23 @@ export default function ProductPage({ params }: Props) {
               <div className="grid grid-cols-5 gap-3">
                 {womenSizes.map((size) => (
                   <div
+                    onClick={() => {
+                      setWomenSize((prev) => {
+                        if ([...prev].includes(Number(size))) {
+                          return [...prev].filter((item) => {
+                            return item !== Number(size);
+                          });
+                        } else {
+                          return [...prev, Number(size)];
+                        }
+                      });
+                    }}
                     key={`women-${size}`}
-                    className="border border-gray-300 rounded-md py-2 text-center text-gray-700 cursor-pointer hover:bg-gray-200 transition"
+                    className={
+                      womenSize.includes(Number(size))
+                        ? "border border-gray-300 rounded-md py-2 text-center text-white cursor-pointer hover:bg-gray-700 transition bg-gray-900"
+                        : "border border-gray-200 rounded-md py-2 text-center text-gray-800 cursor-pointer hover:bg-gray-100 transition"
+                    }
                   >
                     {size}
                   </div>
@@ -115,12 +158,12 @@ export default function ProductPage({ params }: Props) {
             </div>
           </div>
 
-          <button className="bg-black text-white px-6 py-3 rounded-lg hover:bg-gray-800 transition mb-8 w-full md:w-auto max-w-xs self-center md:self-start">
-            Add to Cart - ${product.price.toFixed(2)}
+          <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition mb-8 w-full md:w-auto max-w-xs self-center md:self-start hover:cursor-pointer">
+            Add to Cart - ${updatePrice()}
           </button>
 
           <div className="text-gray-600 leading-relaxed">
-            <h2 className="text-xl font-semibold mb-2">Product Details</h2>
+            <h2 className="text-xl font-semibold mb-2">Product Features</h2>
             <p>{product.description}</p>
           </div>
         </div>
@@ -128,7 +171,7 @@ export default function ProductPage({ params }: Props) {
 
       <Link
         href="/"
-        className="block text-sm text-gray-600 mt-10 hover:underline"
+        className="block text-sm text-gray-500 mt-10 hover:underline hover:text-gray-800"
       >
         ← Back to Home
       </Link>

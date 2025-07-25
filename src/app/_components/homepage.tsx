@@ -185,12 +185,10 @@ export default function HomePage() {
                     transition={{ duration: 0.4, delay: idx * 0.03 }}
                     className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between"
                   >
-                    {/* Category Label */}
                     <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
                       {category}
                     </span>
 
-                    {/* Product Image */}
                     <Image
                       src={images[idx % images.length]}
                       alt={`Product ${idx + 1}`}
@@ -199,7 +197,6 @@ export default function HomePage() {
                       height={295}
                     />
 
-                    {/* Product Info */}
                     <div className="flex flex-col flex-grow justify-between">
                       <div className="flex justify-between items-center mb-2">
                         <h3 className="text-lg font-semibold text-gray-800 truncate hover:cursor-pointer">
@@ -212,7 +209,6 @@ export default function HomePage() {
 
                       <p className="text-sm text-gray-500 mb-4">{tagline}</p>
 
-                      {/* View Details Button */}
                       <button className="w-full mt-auto bg-black hover:bg-gray-800 text-white py-2 rounded-xl font-medium transition hover:cursor-pointer">
                         View Details
                       </button>

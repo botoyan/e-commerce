@@ -73,7 +73,7 @@ const ForgotPassword = () => {
     <div className="min-h-[90vh] flex items-center justify-center px-4 py-16 bg-gray-50">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 sm:p-8">
         <div className="flex items-center justify-center mb-6">
-          <FaKey size={90} className="text-gray-600" />
+          <FaKey size={90} color="#4f46e5" />
         </div>
 
         {errorMessage && (
@@ -121,7 +121,7 @@ const ForgotPassword = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-800 text-white rounded-md transition-all duration-500 font-medium hover:cursor-pointer"
+            className="w-full py-3 px-6 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg transition-all duration-500 font-semibold hover:cursor-pointer"
             disabled={loading}
           >
             Send Reset Link
@@ -130,7 +130,7 @@ const ForgotPassword = () => {
           <div className="text-center mt-2">
             <Link
               href="/sign-in"
-              className="text-sm text-gray-600 hover:text-gray-800 hover:underline"
+              className="text-sm text-gray-500 hover:text-gray-800 hover:underline"
             >
               Back to Sign In
             </Link>

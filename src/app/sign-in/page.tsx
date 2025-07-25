@@ -54,7 +54,7 @@ const SignIn = () => {
     <div className="min-h-[90vh] flex items-center justify-center px-4 py-16 bg-gray-50">
       <div className="w-full max-w-md bg-white shadow-lg rounded-xl p-6 sm:p-8">
         <div className="flex items-center justify-center mb-6">
-          <FaUserLarge size={90} className="text-gray-600" />
+          <FaUserLarge size={90} color="#4f46e5" />
         </div>
         {accountCreated && (
           <div className="p-3 rounded-full bg-green-200 border-green-400 font-medium text-sm text-green-600 text-center mb-2">
@@ -144,15 +144,15 @@ const SignIn = () => {
 
           <button
             type="submit"
-            className="w-full py-2 px-4 bg-gray-600 hover:bg-gray-800 text-white rounded-md transition-all ease-in-out duration-500 hover:cursor-pointer font-medium"
+            className="w-full py-3 px-6 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition hover:cursor-pointer ease-in-out duration-500 font-semibold"
           >
             Sign In
           </button>
 
-          <p className="text-center text-sm text-gray-600 hover:underline hover:cursor-pointer hover:text-gray-800">
+          <p className="text-center text-sm text-gray-500 hover:underline hover:cursor-pointer hover:text-gray-800">
             <Link
               href="/create-account"
-              className="text-center text-sm text-gray-600 hover:underline hover:text-gray-800"
+              className="text-center text-sm text-gray-500 hover:underline hover:text-gray-800"
             >
               Don&apos;t have an account? Create one
             </Link>
