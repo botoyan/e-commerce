@@ -186,7 +186,7 @@ const AddProductForm = () => {
             </label>
             <input
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+              className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="Enter product name"
               value={product.name}
               onChange={(e) =>
@@ -211,7 +211,7 @@ const AddProductForm = () => {
             <label className="block text-sm text-gray-600 mb-1">Brand</label>
             <input
               type="text"
-              className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+              className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="e.g. Nike"
               value={product.brand}
               onChange={(e) =>
@@ -249,7 +249,7 @@ const AddProductForm = () => {
             <label className="block text-sm text-gray-600 mb-1">Price</label>
             <input
               type="number"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-gray-400 transition duration-300"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="Enter price"
               value={product.price}
               onChange={(e) =>
@@ -295,7 +295,7 @@ const AddProductForm = () => {
           <button
             type="button"
             onClick={addProduct}
-            className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition duration-300 hover:cursor-pointer col-span-2 flex justify-center"
+            className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition duration-500 hover:cursor-pointer col-span-2 flex justify-center"
           >
             Add Product
           </button>

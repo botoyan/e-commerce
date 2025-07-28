@@ -27,6 +27,6 @@ const FileUploader = forwardRef<HTMLInputElement, FileUploaderProps>(
   }
 );
 
-FileUploader.displayName = "FileUploader"; // for dev tools
+FileUploader.displayName = "FileUploader";
 
 export default FileUploader;

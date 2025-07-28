@@ -75,7 +75,7 @@ export default function ProductPage({ params }: Props) {
     if (womenSize.length === 0) {
       return totalPrice * menSize.length;
     }
-    return (totalPrice * (womenSize.length + menSize.length)).toFixed(2);
+    return totalPrice * (womenSize.length + menSize.length);
   };
 
   return (
@@ -158,8 +158,8 @@ export default function ProductPage({ params }: Props) {
             </div>
           </div>
 
-          <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition mb-8 w-full md:w-auto max-w-xs self-center md:self-start hover:cursor-pointer">
-            Add to Cart - ${updatePrice()}
+          <button className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 duration-500 transition mb-8 w-full md:w-auto max-w-xs self-center md:self-start hover:cursor-pointer">
+            Add to Cart - ${updatePrice().toFixed(2)}
           </button>
 
           <div className="text-gray-600 leading-relaxed">

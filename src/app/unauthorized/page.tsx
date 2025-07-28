@@ -28,7 +28,7 @@ const Unauthorized = () => {
         </p>
         <Link
           href="/"
-          className="inline-block px-6 py-2 bg-gray-600 hover:bg-gray-800 text-white rounded-md transition font-medium"
+          className="inline-block px-6 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition-all font-medium ease-in-out duration-500"
         >
           Go Home
         </Link>
