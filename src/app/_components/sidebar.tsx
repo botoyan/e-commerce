@@ -94,8 +94,8 @@ function Sidebar({
                     key={`us-men-${size}`}
                     className={
                       menSize.includes(Number(size))
-                        ? "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-300 bg-gray-800 text-white"
-                        : "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-100"
+                        ? "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-500 bg-gray-800 text-white"
+                        : "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-300"
                     }
                     onClick={() => {
                       setMenSize((prev) => {
@@ -141,7 +141,7 @@ function Sidebar({
                     className={
                       womenSize.includes(Number(size))
                         ? "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-500 bg-gray-800 text-white"
-                        : "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-100"
+                        : "px-2.5 py-1 border border-gray-300 rounded hover:bg-gray-300"
                     }
                     onClick={() => {
                       setWomenSize((prev) => {
@@ -175,7 +175,7 @@ function Sidebar({
               value={price}
               className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black"
             />
-            <div className="flex justify-between text-sm text-gray-600">
+            <div className="flex justify-between text-sm text-gray-700 font-semibold">
               <span>{price}</span>
               <span>$2000</span>
             </div>
@@ -259,7 +259,7 @@ function Sidebar({
       <div className="mt-auto space-y-2">
         <button
           onClick={applyFilters}
-          className="relative flex items-center justify-center gap-2 w-full bg-black text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-gray-800 hover:-translate-y-0.5 active:scale-95 transition duration-300 hover:cursor-pointer"
+          className="relative flex items-center justify-center gap-2 w-full bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition duration-300 hover:cursor-pointer"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -276,7 +276,7 @@ function Sidebar({
             />
           </svg>
           Apply Filters
-          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs font-bold w-5 h-5 rounded-full flex items-center justify-center shadow-md">
+          <span className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md overflow-hidden">
             3
           </span>
         </button>

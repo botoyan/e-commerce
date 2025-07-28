@@ -93,7 +93,7 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}
-                className="text-5xl font-bold mb-4"
+                className="text-indigo-600 text-5xl font-bold mb-4"
               >
                 Step Into Style
               </motion.h1>
@@ -101,15 +101,15 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="text-lg mb-6"
+                className="text-lg text-zinc-600 mb-6 font-semibold"
               >
                 Nike. Adidas. Puma. Your Choice, Your Style.
               </motion.p>
               <motion.button
-                initial={{ opacity: 0, y: 30 }}
+                initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.2, duration: 0.6 }}
-                className="bg-white text-black px-6 py-2 rounded-full font-semibold hover:bg-gray-200 transition hover:cursor-pointer"
+                transition={{ duration: 0.6 }}
+                className="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition-all hover:cursor-pointer duration-500 hover:-translate-y-1"
               >
                 Shop Now
               </motion.button>
@@ -117,12 +117,9 @@ export default function HomePage() {
           </div>
 
           <section className="py-16 px-8 bg-gray-50">
-            <h2 id="featured" className="text-3xl font-bold text-center mb-12">
-              Featured Products
-            </h2>
-            <div className="mx-4 flex justify-between text-gray-800 mb-2">
+            <div className="mx-4 flex justify-between text-gray-800 mb-4">
               <button
-                className="flex items-center gap-2 bg-black text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-gray-900 hover:cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-transform duration-300"
+                className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-indigo-700 hover:cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-transform duration-500"
                 onClick={() => {
                   setFiltersOpen(true);
                 }}
@@ -185,7 +182,7 @@ export default function HomePage() {
                     transition={{ duration: 0.4, delay: idx * 0.03 }}
                     className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between"
                   >
-                    <span className="text-xs bg-gray-200 text-gray-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
+                    <span className="text-xs bg-zinc-200 text-zinc-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
                       {category}
                     </span>
 
@@ -197,19 +194,17 @@ export default function HomePage() {
                       height={295}
                     />
 
-                    <div className="flex flex-col flex-grow justify-between">
-                      <div className="flex justify-between items-center mb-2">
-                        <h3 className="text-lg font-semibold text-gray-800 truncate hover:cursor-pointer">
-                          Brand Shoe #{idx + 1}
-                        </h3>
-                        <span className="text-gray-700 font-medium">
-                          $99.99
-                        </span>
+                    <div className="mb-4">
+                      <h3 className="text-lg font-bold text-gray-900">
+                        Nike Basketball Shoes
+                      </h3>
+                      <p className="text-sm text-slate-600">{tagline}</p>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <div className="text-xl font-semibold text-indigo-600">
+                        $120
                       </div>
-
-                      <p className="text-sm text-gray-500 mb-4">{tagline}</p>
-
-                      <button className="w-full mt-auto bg-black hover:bg-gray-800 text-white py-2 rounded-xl font-medium transition hover:cursor-pointer">
+                      <button className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 hover:cursor-pointer hover:-translate-y-1 transition-all duration-500">
                         View Details
                       </button>
                     </div>

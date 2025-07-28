@@ -1,7 +1,11 @@
 @import "tailwindcss";
 
+html,
 body {
-  width: 100%;
+  background-color: #f9fafb; /* or white */
+  overscroll-behavior: none; /* prevent overscroll glow on some browsers */
+  margin: 0;
+  padding: 0;
   height: 100%;
-  background-color: #f9fafb;
+  width: 100%;
 }

@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import Image from "next/image";
-import sneakersIcon from "../../../public/assets/images/icon.jpeg";
+import sneakersIcon from "../../../public/assets/images/icon.png";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
@@ -15,13 +15,13 @@ type NavbarProps = {
 function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
   const data = useSession();
   return (
-    <nav className="bg-black border-b-1 border-b-white">
+    <nav className="sticky bg-indigo-600 border-b-1 border-b-white">
       <div className="mx-auto max-w-10xl px-2 sm:px-6 lg:px-7">
         <div className="relative flex h-16 items-center justify-between">
           <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
             <button
               type="button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-gray-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset hover:cursor-pointer"
+              className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset hover:cursor-pointer"
               aria-controls="mobile-menu"
               aria-expanded="false"
               onClick={() => setOpenMenu((prev) => !prev)}
@@ -71,13 +71,13 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                 />
                 <Link
                   href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
                 >
                   Shop
                 </Link>
                 <Link
                   href="#"
-                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                 >
                   New
                 </Link>
@@ -85,14 +85,14 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                   <Link
                     href="#"
                     onClick={() => signOut()}
-                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                   >
                     Sign Out
                   </Link>
                 ) : (
                   <Link
                     href="/sign-in"
-                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                    className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                   >
                     Sign In
                   </Link>
@@ -101,14 +101,15 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
             </div>
           </div>
           <div className="lg:mr-25 md:mr-20 mr-5 flex justify-center gap-x-2 gap-y-0.5">
-            <div className="flex items-center rounded-full bg-black pl-3 outline-1 -outline-offset-1 has-[input:focus-within]:outline-2 has-[input:focus-within]:-outline-offset-2 has-[input:focus-within]:outline-gray-300 transition delay-150 duration-300 ease-in-out">
+            <div className="flex items-center rounded-full bg-indigo-600 pl-3 focus-within:ring-2 focus-within:ring-white focus-within:ring-offset-1 focus-within:ring-offset-indigo-600 transition duration-300 ease-in-out">
               <input
                 type="text"
                 name="search"
-                className="block px-3.5 py-2 text-white sm:text-sm/6 w-50 rounded-3xl focus:outline-none placeholder:text-white focus:text-gray-200 translate-x-4.5 focus:translate-x-0 transition delay-150 duration-300 ease-in-out lg:w-100"
+                className="block px-3.5 py-2 text-white sm:text-sm/6 w-50 rounded-3xl outline-none placeholder:text-white focus:text-gray-200 translate-x-4.5 focus:translate-x-0 transition duration-300 ease-in-out lg:w-100"
                 placeholder="Search..."
               />
             </div>
+
             <FaSearch
               color="white"
               size={25}
@@ -131,14 +132,14 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
         <div className="space-y-1 px-2 pt-2 pb-3">
           <Link
             href="#"
-            className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
+            className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             aria-current="page"
           >
             Shop
           </Link>
           <Link
             href="#"
-            className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 "
+            className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 "
           >
             New
           </Link>
@@ -146,14 +147,14 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
             <Link
               href="#"
               onClick={() => signOut()}
-              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             >
               Sign Out
             </Link>
           ) : (
             <Link
               href="/sign-in"
-              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:text-[#111111] hover:bg-[#FAF9F6] hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
+              className="block rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             >
               Sign In
             </Link>
@@ -165,3 +166,5 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
 }
 
 export default Navbar;
+
+//TODO need to find another icon, or need to crop the background smart way
