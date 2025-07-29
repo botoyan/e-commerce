@@ -65,17 +65,9 @@ export default function ProductPage({ params }: Props) {
   if (!product) return null;
 
   const updatePrice = () => {
-    const totalPrice = Number(product.price.toFixed(2));
-    if (menSize.length === 0 && womenSize.length === 0) {
-      return totalPrice;
-    }
-    if (menSize.length === 0) {
-      return totalPrice * womenSize.length;
-    }
-    if (womenSize.length === 0) {
-      return totalPrice * menSize.length;
-    }
-    return totalPrice * (womenSize.length + menSize.length);
+    const totalPrice = product.price;
+    const totalSizes = menSize.length + womenSize.length;
+    return totalSizes === 0 ? totalPrice : totalPrice * totalSizes;
   };
 
   return (

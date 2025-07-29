@@ -166,5 +166,3 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
 }
 
 export default Navbar;
-
-//TODO need to find another icon, or need to crop the background smart way
