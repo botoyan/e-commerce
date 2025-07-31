@@ -8,7 +8,7 @@ type CartItem = {
   name: string;
   price: number;
   image: string;
-  selectedSizes: number[];
+  selectedSize: number;
   quantity: number;
 };
 
@@ -18,7 +18,7 @@ const initialCart: CartItem[] = [
     name: "Nike PG 6",
     price: 99.99,
     image: "/assets/images/nike-pg-6.jpg",
-    selectedSizes: [8, 9],
+    selectedSize: 8,
     quantity: 2,
   },
   {
@@ -26,7 +26,55 @@ const initialCart: CartItem[] = [
     name: "Nike Mercurial CR7",
     price: 129.99,
     image: "/assets/images/nike-mercurial-cr7.jpg",
-    selectedSizes: [7.5],
+    selectedSize: 7.5,
+    quantity: 1,
+  },
+  {
+    id: "3",
+    name: "Adidas Predator",
+    price: 119.99,
+    image: "/assets/images/adidas-predator.jpg",
+    selectedSize: 9,
+    quantity: 1,
+  },
+  {
+    id: "4",
+    name: "Nike PG 6",
+    price: 99.99,
+    image: "/assets/images/nike-pg-6.jpg",
+    selectedSize: 10,
+    quantity: 1,
+  },
+  {
+    id: "5",
+    name: "Nike PG 6",
+    price: 99.99,
+    image: "/assets/images/nike-pg-6.jpg",
+    selectedSize: 8,
+    quantity: 2,
+  },
+  {
+    id: "6",
+    name: "Nike Mercurial CR7",
+    price: 129.99,
+    image: "/assets/images/nike-mercurial-cr7.jpg",
+    selectedSize: 7.5,
+    quantity: 1,
+  },
+  {
+    id: "7",
+    name: "Adidas Predator",
+    price: 119.99,
+    image: "/assets/images/adidas-predator.jpg",
+    selectedSize: 9,
+    quantity: 1,
+  },
+  {
+    id: "8",
+    name: "Nike PG 6",
+    price: 99.99,
+    image: "/assets/images/nike-pg-6.jpg",
+    selectedSize: 10,
     quantity: 1,
   },
 ];
@@ -46,13 +94,13 @@ export default function CartPage() {
   };
 
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.quantity * item.selectedSizes.length,
+    (sum, item) => sum + item.price * item.quantity,
     0
   );
 
   return (
-    <div className="min-h-screen bg-gray-50 px-6 py-12 flex flex-col max-w-6xl mx-auto">
-      <h1 className="text-4xl font-bold text-indigo-600 mb-10 text-center">
+    <div className="bg-gray-50 px-4 py-8 max-w-6xl mx-auto min-h-screen">
+      <h1 className="text-3xl font-bold text-indigo-600 mb-8 text-center">
         Your Shopping Cart
       </h1>
 
@@ -67,14 +115,14 @@ export default function CartPage() {
           </Link>
         </div>
       ) : (
-        <div className="flex flex-col md:flex-row gap-10">
-          <div className="flex-grow bg-white rounded-xl shadow-md p-6">
+        <div className="flex flex-col md:flex-row gap-6">
+          <div className="flex-grow bg-white rounded-xl shadow-md p-4 max-h-[60vh] md:max-h-[75vh] overflow-y-auto">
             {cartItems.map((item) => (
               <div
                 key={item.id}
-                className="flex gap-6 border-b last:border-none py-4 items-center"
+                className="flex items-start gap-4 border-b last:border-none py-4"
               >
-                <div className="flex-shrink-0 w-28 h-28 relative rounded-lg overflow-hidden shadow-sm">
+                <div className="relative w-24 h-24 rounded-md overflow-hidden flex-shrink-0 shadow-sm">
                   <Image
                     src={item.image}
                     alt={item.name}
@@ -82,77 +130,91 @@ export default function CartPage() {
                     className="object-cover"
                   />
                 </div>
-                <div className="flex flex-col flex-grow justify-between h-full">
-                  <div>
-                    <h2 className="text-xl font-semibold text-gray-900">
-                      {item.name}
-                    </h2>
-                    <p className="text-sm text-gray-600 mt-1">
-                      Sizes: {item.selectedSizes.join(", ")}
-                    </p>
-                  </div>
 
-                  <div className="flex items-center gap-4 mt-4">
-                    <label className="text-gray-700 font-medium">Qty:</label>
-                    <input
-                      type="number"
-                      min={1}
-                      value={item.quantity}
-                      onChange={(e) =>
-                        updateQuantity(item.id, parseInt(e.target.value))
+                <div className="flex flex-col flex-grow">
+                  <h2 className="text-lg font-semibold text-gray-900">
+                    {item.name}
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    Size: {item.selectedSize}
+                  </p>
+
+                  <select
+                    value={
+                      item.quantity > 11 ? "remove" : item.quantity.toString()
+                    }
+                    onChange={(e) => {
+                      if (e.target.value === "remove") {
+                        removeItem(item.id);
+                      } else {
+                        updateQuantity(item.id, parseInt(e.target.value));
                       }
-                      className="w-16 border rounded-md px-2 py-1 text-center focus:outline-indigo-500"
-                    />
-                    <button
-                      onClick={() => removeItem(item.id)}
-                      className="text-red-600 hover:text-red-800 font-semibold"
-                      aria-label={`Remove ${item.name} from cart`}
+                    }}
+                    className="mt-3 w-32 rounded-md border border-gray-300 bg-white px-3 py-2 text-gray-700 appearance-none focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600 hover:border-indigo-600 transition duration-200"
+                    aria-label={`Select quantity or remove ${item.name}`}
+                  >
+                    {[...Array(11)].map((_, i) => (
+                      <option key={i + 1} value={(i + 1).toString()}>
+                        Qty: {i + 1}
+                      </option>
+                    ))}
+                    <option
+                      value="remove"
+                      className="text-red-600 font-semibold"
                     >
                       Remove
-                    </button>
-                  </div>
+                    </option>
+                  </select>
                 </div>
 
-                <div className="text-indigo-600 font-bold text-lg min-w-[90px] text-right">
-                  $
-                  {(
-                    item.price *
-                    item.quantity *
-                    item.selectedSizes.length
-                  ).toFixed(2)}
+                <div className="text-indigo-600 font-semibold min-w-[80px] text-right ml-auto">
+                  ${(item.price * item.quantity).toFixed(2)}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="w-full md:w-80 bg-white rounded-xl shadow-md p-6 flex flex-col justify-between">
-            <div>
-              <h3 className="text-2xl font-semibold mb-6">Order Summary</h3>
-              <div className="flex justify-between text-gray-700 mb-4">
-                <span>Items:</span>
+          <div className="w-full md:w-72 bg-white rounded-xl shadow-md p-6 self-start">
+            <h3 className="text-xl font-semibold mb-4">Order Summary</h3>
+
+            <div className="space-y-4 text-gray-700 text-sm">
+              <div className="flex justify-between">
+                <span>Total Items</span>
                 <span>
-                  {cartItems.reduce(
-                    (acc, item) =>
-                      acc + item.quantity * item.selectedSizes.length,
-                    0
-                  )}
+                  {cartItems.reduce((acc, item) => acc + item.quantity, 0)}
                 </span>
               </div>
-              <div className="flex justify-between text-indigo-600 font-bold text-xl mb-8">
-                <span>Total:</span>
+
+              <div className="flex justify-between">
+                <span>Shipping</span>
+                <span className="text-gray-500">Free</span>
+              </div>
+
+              <div className="flex justify-between border-t pt-3 font-bold text-indigo-600 text-lg">
+                <span>Total</span>
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
             </div>
 
             <button
-              className="bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition duration-300"
+              className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg font-semibold hover:bg-indigo-700 transition"
               onClick={() => alert("Proceeding to checkout...")}
             >
-              Proceed to Checkout
+              Checkout
             </button>
           </div>
+        </div>
+      )}
+
+      {cartItems.length > 0 && (
+        <div className="text-center mt-10">
+          <Link href="/" className="text-sm text-gray-500 hover:underline">
+            ← Back to Homepage
+          </Link>
         </div>
       )}
     </div>
   );
 }
+
+//TODO need to add max-width, and adjust the design

@@ -21,7 +21,7 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
           <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
             <button
               type="button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset hover:cursor-pointer"
+              className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset hover:cursor-pointer"
               aria-controls="mobile-menu"
               aria-expanded="false"
               onClick={() => setOpenMenu((prev) => !prev)}
@@ -79,7 +79,7 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                   href="#"
                   className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                 >
-                  New
+                  Account
                 </Link>
                 {data.status === "authenticated" ? (
                   <Link
@@ -116,11 +116,13 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
               className="mt-1.5 hover:cursor-pointer hover:scale-115 transition delay-150 duration-600 ease-in-out"
             />
             <div className="relative hover:cursor-pointer hover:scale-115 transition delay-150 duration-600 ease-in-out">
-              <FiShoppingCart
-                color="white"
-                size={25}
-                className="ml-1.5 mt-1.5"
-              />
+              <Link href="/cart">
+                <FiShoppingCart
+                  color="white"
+                  size={25}
+                  className="ml-1.5 mt-1.5"
+                />
+              </Link>
               <div className="absolute top-[-1px] left-[28px] text-white text-sm">
                 0
               </div>
@@ -141,7 +143,7 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
             href="#"
             className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 "
           >
-            New
+            Account
           </Link>
           {data.status === "authenticated" ? (
             <Link
