@@ -5,18 +5,41 @@ import Navbar from "./navbar";
 import { useRouter } from "next/navigation";
 import { SessionProvider } from "next-auth/react";
 import { motion } from "framer-motion";
-import productImage1 from "../../../public/assets/images/nike-pg-6.jpg";
-import productImage2 from "../../../public/assets/images/nike-football.jpg";
-import productImage3 from "../../../public/assets/images/nike-hypervenom.jpg";
-import productImage4 from "../../../public/assets/images/nike-mercurial-cr7.jpg";
-import productImage5 from "../../../public/assets/images/messi-f50.jpg";
-import productImage6 from "../../../public/assets/images/nike-kyrie-3.jpg";
-import productImage7 from "../../../public/assets/images/nike-ronaldinho.jpg";
-import productImage8 from "../../../public/assets/images/nike-kobe.jpg";
-import productImage9 from "../../../public/assets/images/puma-football.jpg";
-import productImage10 from "../../../public/assets/images/adidas-predator.jpg";
-import productImage11 from "../../../public/assets/images/nike-kd-16.jpg";
-import productImage12 from "../../../public/assets/images/nike-hypervenom-phelon.jpg";
+import productImage1 from "../../../public/assets/images/lebron-prime-93-removebg-preview.png";
+import productImage2 from "../../../public/assets/images/LEBRON+XX.png-removebg-preview.png";
+import productImage3 from "../../../public/assets/images/JA+3.png-removebg-preview.png";
+import productImage4 from "../../../public/assets/images/GIANNIS+FREAK+7.png-removebg-preview.png";
+import productImage5 from "../../../public/assets/images/SABRINA+3.png-removebg-preview.png";
+import productImage6 from "../../../public/assets/images/WMNS+JORDAN+HEIR+SERIES+AS.png-removebg-preview.png";
+import productImage7 from "../../../public/assets/images/JORDAN+HEIR.png-removebg-preview.png";
+import productImage8 from "../../../public/assets/images/JORDAN+LUKA+.77.png-removebg-preview.png";
+import productImage9 from "../../../public/assets/images/ZM+LEBRON+NXXT+GEN+AMPD+DT.png-removebg-preview.png";
+import productImage10 from "../../../public/assets/images/ZM+SUPERFLY+10+ELITE+FG.png-removebg-preview.png";
+import productImage11 from "../../../public/assets/images/ZM+SUPERFLY+10+ACAD+KM+FG-MG.png-removebg-preview.png";
+import productImage12 from "../../../public/assets/images/ZM+VAPOR+16+ELITE+FG.png-removebg-preview.png";
+import productImage13 from "../../../public/assets/images/LEGEND+10+ACADEMY+TF.png-removebg-preview.png";
+import productImage14 from "../../../public/assets/images/NIKE+REACTGATO.png-removebg-preview.png";
+import productImage15 from "../../../public/assets/images/PHANTOM+6+HIGH+ACAD+FG-MG.png-removebg-preview.png";
+import productImage16 from "../../../public/assets/images/PHANTOM+6+HIGH+PRO+FG.png-removebg-preview.png";
+import productImage17 from "../../../public/assets/images/PHANTOM+6+LOW+ACAD+IC.png-removebg-preview.png";
+import productImage18 from "../../../public/assets/images/WMNS+AIR+JORDAN+4+RETRO+OG+SP-removebg-preview.png";
+import productImage19 from "../../../public/assets/images/NIKE++AIR+VAPORMAX+PLUS-removebg-preview.png";
+import productImage20 from "../../../public/assets/images/NIKE+GATO+LV8-removebg-preview.png";
+import productImage21 from "../../../public/assets/images/NIKE+SHOX+TL-removebg-preview.png";
+import productImage22 from "../../../public/assets/images/NIKE+P-6000+SE-removebg-preview.png";
+import productImage23 from "../../../public/assets/images/AIR+FORCE+1+'07-removebg-preview.png";
+import productImage24 from "../../../public/assets/images/NIKE+DUNK+LOW+RETRO-removebg-preview.png";
+import productImage25 from "../../../public/assets/images/AIR+MAX+90+PRM-removebg-preview.png";
+import productImage26 from "../../../public/assets/images/NIKE+SHOX+R4-removebg-preview.png";
+import productImage27 from "../../../public/assets/images/NIKE+CALM+MULE+-+REALTREE+NA-removebg-preview.png";
+import productImage28 from "../../../public/assets/images/AIR+JORDAN+4+RETRO-removebg-preview.png";
+import productImage29 from "../../../public/assets/images/NIKE+AIR+MAX+PLUS-removebg-preview.png";
+import productImage30 from "../../../public/assets/images/AIR+MAX+UPTEMPO+'95-removebg-preview.png";
+import productImage31 from "../../../public/assets/images/AIR+VAPORMAX+2023+FK-removebg-preview.png";
+import productImage32 from "../../../public/assets/images/AIR+JORDAN+1+LOW+SE-removebg-preview.png";
+import productImage33 from "../../../public/assets/images/JORDAN+SPIZIKE+LOW-removebg-preview.png";
+import productImage34 from "../../../public/assets/images/total-90-white-and-gym-red-hq2851-100-release-date-removebg-preview.png";
+import productImage35 from "../../../public/assets/images/JORDAN+MAX+AURA+7-removebg-preview.png";
 import "../globals.css";
 import Sidebar from "./sidebar";
 export default function HomePage() {
@@ -77,6 +100,29 @@ export default function HomePage() {
     productImage10,
     productImage11,
     productImage12,
+    productImage13,
+    productImage14,
+    productImage15,
+    productImage16,
+    productImage17,
+    productImage18,
+    productImage19,
+    productImage20,
+    productImage21,
+    productImage22,
+    productImage23,
+    productImage24,
+    productImage25,
+    productImage26,
+    productImage27,
+    productImage28,
+    productImage29,
+    productImage30,
+    productImage31,
+    productImage32,
+    productImage33,
+    productImage34,
+    productImage35,
   ];
 
   return (
@@ -140,8 +186,8 @@ export default function HomePage() {
                 </div>
               </div>
             </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-10 px-4">
-              {Array.from({ length: 24 }).map((_, idx) => {
+            <div className="grid grid-cols-1 custom-grid-520 custom-grid-820 lg:grid-cols-4 gap-10 px-4">
+              {Array.from({ length: 48 }).map((_, idx) => {
                 const categories = [
                   "Basketball",
                   "Football",
@@ -180,7 +226,7 @@ export default function HomePage() {
                     whileInView={{ opacity: 1, scale: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: 0.4, delay: idx * 0.03 }}
-                    className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between"
+                    className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between min-w-[240px]"
                   >
                     <span className="text-xs bg-zinc-200 text-zinc-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
                       {category}
@@ -230,6 +276,18 @@ export default function HomePage() {
           filteredSidebarRef={filteredSidebarRef}
         />
       </div>
+      <style jsx>{`
+        @media (min-width: 820px) and (max-width: 1080px) {
+          .custom-grid-820 {
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+          }
+        }
+        @media (min-width: 520px) and (max-width: 819px) {
+          .custom-grid-520 {
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+          }
+        }
+      `}</style>
     </SessionProvider>
   );
 }

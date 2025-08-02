@@ -227,8 +227,7 @@ function Sidebar({
               "Golf",
               "Lifestyle",
               "Running",
-              "Casual",
-              "Training & Gym",
+              "Baseball",
             ].map((tag) => (
               <span
                 key={tag}
