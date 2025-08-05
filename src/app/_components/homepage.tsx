@@ -58,6 +58,22 @@ import productImage50 from "../../../public/assets/images/NIKE+AIR+ZOOM+UPTURN+S
 import productImage51 from "../../../public/assets/images/NIKE+DUNK+LOW+NN+N7.png-removebg-preview.png";
 import productImage52 from "../../../public/assets/images/NIKE+ZOOM+KD+IV-removebg-preview.png";
 import productImage53 from "../../../public/assets/images/WMNS+AIR+JORDAN+1+MID+SE-removebg-preview.png";
+import productImage54 from "../../../public/assets/images/adidas_Initiation_Black_JS0464_01_00_standard-removebg-preview.png";
+import productImage55 from "../../../public/assets/images/adidas_Initiation_Blue_JQ1723_01_00_standard-removebg-preview.png";
+import productImage56 from "../../../public/assets/images/Adizero_Select_3.0_Shoes_Blue_JR8272_01_00_standard-removebg-preview.png";
+import productImage57 from "../../../public/assets/images/Anthony_Edwards_1_Low_Basketball_Shoes_Green_JS1778_01_00_standard-removebg-preview.png";
+import productImage58 from "../../../public/assets/images/BAPE_x_Dame_9_Shoes_Red_IH0786_01_00_standard-removebg-preview.png";
+import productImage59 from "../../../public/assets/images/Copa_Pure_3_Elite_Firm_Ground_Cleats_Black_JH6304_HM4_hover-removebg-preview.png";
+import productImage60 from "../../../public/assets/images/Copa_Pure_3_Elite_Firm_Ground_Cleats_Black_JH8729_01_00_standard-removebg-preview.png";
+import productImage61 from "../../../public/assets/images/D.O.N._Issue_7_White_JS1299_01_00_standard-removebg-preview.png";
+import productImage62 from "../../../public/assets/images/Dame_X_Shoes_Green_KI5949_01_00_standard-removebg-preview.png";
+import productImage63 from "../../../public/assets/images/F50_Elite_Firm_Ground_Cleats_Black_JH7616_01_00_standard-removebg-preview.png";
+import productImage64 from "../../../public/assets/images/F50_Elite_Firm_Ground_Cleats_White_JH7617_HM4-removebg-preview.png";
+import productImage65 from "../../../public/assets/images/F50_Elite_Laceless_Firm_Ground_Cleats_Purple_JH7628_HM4_hover-removebg-preview.png";
+import productImage66 from "../../../public/assets/images/F50_Messi_Elite_Firm_Ground_Cleats_White_JP5593_HM4-removebg-preview.png";
+import productImage67 from "../../../public/assets/images/Harden_Volume_9_Red_JS1304_01_00_standard-removebg-preview.png";
+import productImage68 from "../../../public/assets/images/Predator_Elite_Fold-Over_Tongue_Firm_Ground_Cleats_Black_JI1096_01_00_standard-removebg-preview.png";
+
 import "../globals.css";
 import Sidebar from "./sidebar";
 export default function HomePage() {
@@ -159,6 +175,21 @@ export default function HomePage() {
     productImage51,
     productImage52,
     productImage53,
+    productImage54,
+    productImage55,
+    productImage56,
+    productImage57,
+    productImage58,
+    productImage59,
+    productImage60,
+    productImage61,
+    productImage62,
+    productImage63,
+    productImage64,
+    productImage65,
+    productImage66,
+    productImage67,
+    productImage68,
   ];
 
   return (
@@ -223,7 +254,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="grid grid-cols-1 custom-grid-520 custom-grid-820 lg:grid-cols-4 gap-10 px-4">
-              {Array.from({ length: 48 }).map((_, idx) => {
+              {Array.from({ length: 68 }).map((_, idx) => {
                 const categories = [
                   "Basketball",
                   "Football",
