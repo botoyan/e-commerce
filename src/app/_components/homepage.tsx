@@ -40,6 +40,24 @@ import productImage32 from "../../../public/assets/images/AIR+JORDAN+1+LOW+SE-re
 import productImage33 from "../../../public/assets/images/JORDAN+SPIZIKE+LOW-removebg-preview.png";
 import productImage34 from "../../../public/assets/images/total-90-white-and-gym-red-hq2851-100-release-date-removebg-preview.png";
 import productImage35 from "../../../public/assets/images/JORDAN+MAX+AURA+7-removebg-preview.png";
+import productImage36 from "../../../public/assets/images/AAF88-removebg-preview.png";
+import productImage37 from "../../../public/assets/images/air-tech-challenge-2-tart-and-stone-blue-fz9033-101-release-date-removebg-preview.png";
+import productImage38 from "../../../public/assets/images/AIR+DT+MAX+_96-removebg-preview.png";
+import productImage39 from "../../../public/assets/images/AIR+JORDAN+1+LOW+EASYON.png-removebg-preview.png";
+import productImage40 from "../../../public/assets/images/AIR+JORDAN+12+RETRO.png-removebg-preview.png";
+import productImage41 from "../../../public/assets/images/AIR+MAX+SOLO+MICHIGAN+STATE.png-removebg-preview.png";
+import productImage42 from "../../../public/assets/images/AIR+MONARCH+IV.png-removebg-preview.png";
+import productImage43 from "../../../public/assets/images/JORDAN+FLTCLB+_91.png-removebg-preview.png";
+import productImage44 from "../../../public/assets/images/JORDAN+MVP.png-removebg-preview.png";
+import productImage45 from "../../../public/assets/images/JORDAN+MVP+92-removebg-preview.png";
+import productImage46 from "../../../public/assets/images/JORDAN+TRUE+FLIGHT-removebg-preview.png";
+import productImage47 from "../../../public/assets/images/nike-sb-dunk-low-pro-dark-team-red-and-olive-flak-hq1625-600-release-date.jpg-removebg-preview.png";
+import productImage48 from "../../../public/assets/images/NIKE+AIR+MAX+1+PREM.png-removebg-preview.png";
+import productImage49 from "../../../public/assets/images/NIKE+AIR+MAX+PLUS+OG-removebg-preview.png";
+import productImage50 from "../../../public/assets/images/NIKE+AIR+ZOOM+UPTURN+SC.png-removebg-preview.png";
+import productImage51 from "../../../public/assets/images/NIKE+DUNK+LOW+NN+N7.png-removebg-preview.png";
+import productImage52 from "../../../public/assets/images/NIKE+ZOOM+KD+IV-removebg-preview.png";
+import productImage53 from "../../../public/assets/images/WMNS+AIR+JORDAN+1+MID+SE-removebg-preview.png";
 import "../globals.css";
 import Sidebar from "./sidebar";
 export default function HomePage() {
@@ -123,6 +141,24 @@ export default function HomePage() {
     productImage33,
     productImage34,
     productImage35,
+    productImage36,
+    productImage37,
+    productImage38,
+    productImage39,
+    productImage40,
+    productImage41,
+    productImage42,
+    productImage43,
+    productImage44,
+    productImage45,
+    productImage46,
+    productImage47,
+    productImage48,
+    productImage49,
+    productImage50,
+    productImage51,
+    productImage52,
+    productImage53,
   ];
 
   return (
