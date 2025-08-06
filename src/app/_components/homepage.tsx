@@ -73,6 +73,27 @@ import productImage65 from "../../../public/assets/images/F50_Elite_Laceless_Fir
 import productImage66 from "../../../public/assets/images/F50_Messi_Elite_Firm_Ground_Cleats_White_JP5593_HM4-removebg-preview.png";
 import productImage67 from "../../../public/assets/images/Harden_Volume_9_Red_JS1304_01_00_standard-removebg-preview.png";
 import productImage68 from "../../../public/assets/images/Predator_Elite_Fold-Over_Tongue_Firm_Ground_Cleats_Black_JI1096_01_00_standard-removebg-preview.png";
+import productImage69 from "../../../public/assets/images/Adizero_EVO_SL_Shoes_White_JS4487_HM1-removebg-preview.png";
+import productImage70 from "../../../public/assets/images/Adizero_ZG_Spikeless_Golf_Shoes_White_JS1898_01_00_standard-removebg-preview.png";
+import productImage71 from "../../../public/assets/images/Campus_00s_Shoes_Black_HQ8708_01_standard-removebg-preview.png";
+import productImage72 from "../../../public/assets/images/Campus_00s_Shoes_Green_H03472_01_standard-removebg-preview.png";
+import productImage73 from "../../../public/assets/images/Codechaos_25_Spikeless_Golf_Shoes_Black_IF3270_01_standard-removebg-preview.png";
+import productImage74 from "../../../public/assets/images/Codechaos_25_Spikeless_Golf_Shoes_White_IH8445_01_00_standard-removebg-preview.png";
+import productImage75 from "../../../public/assets/images/Gazelle_Spikeless_Golf_Shoes_Beige_JS1894_01_00_standard-removebg-preview.png";
+import productImage76 from "../../../public/assets/images/Grand_Court_2.0_Shoes_White_GW9195_HM1-removebg-preview.png";
+import productImage77 from "../../../public/assets/images/Handball_Spezial_Shoes_Blue_BD7633_01_00_standard-removebg-preview.png";
+import productImage78 from "../../../public/assets/images/Handball_Spezial_Shoes_Blue_IF7087_01_standard-removebg-preview.png";
+import productImage79 from "../../../public/assets/images/Miami_Hurricanes_adizero_Evo_SL_White_JQ2148_01_00_standard-removebg-preview.png";
+import productImage80 from "../../../public/assets/images/S2G_24_Leather_Spikeless_Golf_Shoes_White_IH8523_01_00_standard-removebg-preview.png";
+import productImage81 from "../../../public/assets/images/Samba_OG_Shoes_White_B75806_01_00_standard-removebg-preview.png";
+import productImage82 from "../../../public/assets/images/Samba_Spikeless_Golf_Shoes_White_JH6151_HM1-removebg-preview.png";
+import productImage83 from "../../../public/assets/images/Stan_Smith_Spikeless_Golf_Shoes_White_JH6153_HM1-removebg-preview.png";
+import productImage84 from "../../../public/assets/images/Tech_Response_3.0_Wide_Golf_Shoes_Black_GV6893_01_00_standard-removebg-preview.png";
+import productImage85 from "../../../public/assets/images/Tour360_24_Golf_Shoes_White_JR9265_01_00_standard-removebg-preview.png";
+import productImage86 from "../../../public/assets/images/Ultraboost_1.0_Shoes_Blue_JQ0827_01_00_standard-removebg-preview.png";
+import productImage87 from "../../../public/assets/images/Ultraboost_1.0_Shoes_White_JQ0826_01_00_standard-removebg-preview.png";
+import productImage88 from "../../../public/assets/images/Ultraboost_5X_Shoes_Blue_JS1929_01_00_standard-removebg-preview.png";
+import productImage89 from "../../../public/assets/images/Ultrarun_5_Running_Shoes_White_JS2836_HM1-removebg-preview.png";
 
 import "../globals.css";
 import Sidebar from "./sidebar";
@@ -190,6 +211,27 @@ export default function HomePage() {
     productImage66,
     productImage67,
     productImage68,
+    productImage69,
+    productImage70,
+    productImage71,
+    productImage72,
+    productImage73,
+    productImage74,
+    productImage75,
+    productImage76,
+    productImage77,
+    productImage78,
+    productImage79,
+    productImage80,
+    productImage81,
+    productImage82,
+    productImage83,
+    productImage84,
+    productImage85,
+    productImage86,
+    productImage87,
+    productImage88,
+    productImage89,
   ];
 
   return (
