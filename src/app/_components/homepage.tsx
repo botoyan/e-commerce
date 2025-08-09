@@ -94,6 +94,24 @@ import productImage86 from "../../../public/assets/images/Ultraboost_1.0_Shoes_B
 import productImage87 from "../../../public/assets/images/Ultraboost_1.0_Shoes_White_JQ0826_01_00_standard-removebg-preview.png";
 import productImage88 from "../../../public/assets/images/Ultraboost_5X_Shoes_Blue_JS1929_01_00_standard-removebg-preview.png";
 import productImage89 from "../../../public/assets/images/Ultrarun_5_Running_Shoes_White_JS2836_HM1-removebg-preview.png";
+import productImage90 from "../../../public/assets/images/AG-Football-Boots-Unisex-2-removebg-preview.png";
+import productImage91 from "../../../public/assets/images/AG-Football-Boots-Unisex-3-removebg-preview.png";
+import productImage92 from "../../../public/assets/images/AG-Football-Boots-Unisex-removebg-preview.png";
+import productImage93 from "../../../public/assets/images/AG-Unisex-removebg-preview.png";
+import productImage94 from "../../../public/assets/images/Artificial-Ground-Men_s-Soccer-Cleats-3-removebg-preview.png";
+import productImage95 from "../../../public/assets/images/Artificial-Ground-Men_s-Soccer-Cleats-2-removebg-preview.png";
+import productImage96 from "../../../public/assets/images/FUTURE-8-MATCH-RE-CHARGE-TT-Football-Boots-Unisex-removebg-preview.png";
+import productImage97 from "../../../public/assets/images/FUTURE-8-PRO-Cage-Men_s-Soccer-Cleats-removebg-preview.png";
+import productImage98 from "../../../public/assets/images/Artificial-Ground-Men_s-Soccer-Cleats-removebg-preview.png";
+import productImage99 from "../../../public/assets/images/FUTURE-8-PRO-Cage-Unisex-removebg-preview.png";
+import productImage100 from "../../../public/assets/images/FUTURE-8-ULTIMATE-FG-Unisex-removebg-preview.png";
+import productImage101 from "../../../public/assets/images/FUTURE-8-ULTIMATE-Firm-Ground-Men_s-Soccer-Cleats-removebg-preview.png";
+import productImage102 from "../../../public/assets/images/FUTURE-8-ULTIMATE-RECHRGE-FG-Unisex-removebg-preview.png";
+import productImage103 from "../../../public/assets/images/PUMA-x-KIDSUPER-FUTURE-8-ULTIMATE-Firm-Ground-Men_s-Soccer-Cleats-removebg-preview.png";
+import productImage104 from "../../../public/assets/images/ULTRA-5-PRO-CAGE-Men_s-Soccer-Cleats-removebg-preview.png";
+import productImage105 from "../../../public/assets/images/ULTRA-6-ULTIMATE-CP-FG-Unisex-removebg-preview.png";
+import productImage106 from "../../../public/assets/images/ULTRA-6-ULTIMATE-DARE-TO-FG-soccer-cleats-Unisex-removebg-preview.png";
+import productImage107 from "../../../public/assets/images/ULTRA-6-ULTIMATE-RECHRGE-FG-Football-Boots-Unisex-removebg-preview.png";
 
 import "../globals.css";
 import Sidebar from "./sidebar";
@@ -232,6 +250,25 @@ export default function HomePage() {
     productImage87,
     productImage88,
     productImage89,
+    productImage90,
+    productImage91,
+    productImage92,
+    productImage93,
+    productImage94,
+    productImage95,
+    productImage96,
+    productImage97,
+    productImage98,
+    productImage99,
+    productImage100,
+    productImage100,
+    productImage101,
+    productImage102,
+    productImage103,
+    productImage104,
+    productImage105,
+    productImage106,
+    productImage107,
   ];
 
   return (
@@ -296,7 +333,7 @@ export default function HomePage() {
               </div>
             </div>
             <div className="grid grid-cols-1 custom-grid-520 custom-grid-820 lg:grid-cols-4 gap-10 px-4">
-              {Array.from({ length: 68 }).map((_, idx) => {
+              {Array.from({ length: 120 }).map((_, idx) => {
                 const categories = [
                   "Basketball",
                   "Football",
