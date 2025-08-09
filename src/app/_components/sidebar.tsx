@@ -12,7 +12,6 @@ type Sidebar = {
   setPrice: React.Dispatch<React.SetStateAction<number>>;
   categories: string[];
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
-  setBrands: React.Dispatch<React.SetStateAction<string[]>>;
   applyFilters: () => void;
   filteredSidebarRef: React.RefObject<HTMLDivElement | null>;
 };
@@ -28,7 +27,6 @@ function Sidebar({
   setPrice,
   categories,
   setCategories,
-  setBrands,
   applyFilters,
   filteredSidebarRef,
 }: Sidebar) {
@@ -183,42 +181,6 @@ function Sidebar({
         </div>
 
         <div>
-          <h3 className="text-lg font-semibold mb-3">Brands</h3>
-          <div className="grid grid-cols-2 gap-y-2 gap-x-4">
-            {[
-              "Nike",
-              "Adidas",
-              "Puma",
-              "New Balance",
-              "Converse",
-              "Reebok",
-            ].map((brand) => (
-              <label
-                key={brand}
-                className="flex items-center gap-2 cursor-pointer"
-              >
-                <input
-                  type="checkbox"
-                  className="accent-black"
-                  onChange={() => {
-                    setBrands((prev) => {
-                      if ([...prev].includes(brand)) {
-                        return [...prev].filter((item) => {
-                          return item !== brand;
-                        });
-                      } else {
-                        return [...prev, brand];
-                      }
-                    });
-                  }}
-                />
-                <span>{brand}</span>
-              </label>
-            ))}
-          </div>
-        </div>
-
-        <div>
           <h3 className="text-lg font-semibold mb-3">Categories</h3>
           <div className="flex flex-wrap gap-2">
             {[
@@ -226,8 +188,7 @@ function Sidebar({
               "Football",
               "Golf",
               "Lifestyle",
-              "Running",
-              "Baseball",
+              "Gym & Running",
             ].map((tag) => (
               <span
                 key={tag}

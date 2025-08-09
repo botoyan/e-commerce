@@ -39,7 +39,6 @@ const AddProductForm = () => {
     "10",
     "10.5",
     "11",
-    "11.5",
     "12",
     "13",
   ];
@@ -48,9 +47,7 @@ const AddProductForm = () => {
     "Football",
     "Golf",
     "Lifestyle",
-    "Running",
-    "Casual",
-    "Training & Gym",
+    "Gym & Running",
   ];
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedMenSizes, setSelectedMenSizes] = useState<string[]>([]);
