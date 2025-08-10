@@ -9,6 +9,7 @@ type dropdownProps = {
   multiSelect?: boolean;
   singleSelectValue?: string;
   onSelectSingle?: (option: string) => void;
+  selectText: string;
 };
 
 const Dropdown: React.FC<dropdownProps> = ({
@@ -19,6 +20,7 @@ const Dropdown: React.FC<dropdownProps> = ({
   multiSelect = true,
   singleSelectValue,
   onSelectSingle,
+  selectText,
 }) => {
   const dropdownRef = useRef<HTMLDivElement>(null);
   const [open, setOpen] = useState(false);
@@ -63,7 +65,7 @@ const Dropdown: React.FC<dropdownProps> = ({
             onClick={() => setOpen((prev) => !prev)}
             className="w-full bg-white border border-gray-300 rounded-md shadow-sm px-3 py-2 text-left text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-gray-400"
           >
-            Select sizes
+            {selectText}
             <span className="float-right">
               <svg
                 className={`w-5 h-5 inline-block transition-transform ${

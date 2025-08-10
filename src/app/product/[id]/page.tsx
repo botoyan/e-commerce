@@ -19,21 +19,22 @@ const products: Product[] = [
     name: "Nike PG 6",
     price: 99.99,
     description: "Perfect for fast breaks and sharp cuts.",
-    image: "/assets/images/nike-pg-6.jpg",
+    image: "/assets/images/AAF88-removebg-preview.png",
   },
   {
     id: "2",
     name: "Nike Mercurial CR7",
     price: 129.99,
     description: "Engineered for speed and control.",
-    image: "/assets/images/nike-mercurial-cr7.jpg",
+    image:
+      "/assets/images/air-tech-challenge-2-tart-and-stone-blue-fz9033-101-release-date-removebg-preview.png",
   },
   {
     id: "3",
     name: "Adidas Predator",
     price: 119.99,
     description: "Unleash power and precision on the pitch.",
-    image: "/assets/images/adidas-predator.jpg",
+    image: "/assets/images/AIR+DT+MAX+_96-removebg-preview.png",
   },
 ];
 
@@ -215,3 +216,5 @@ export default function ProductPage({ params }: Props) {
     </div>
   );
 }
+
+//TODO error on image

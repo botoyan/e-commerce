@@ -21,7 +21,7 @@ async function verifyUser({ email, password }) {
   };
 }
 
-export default NextAuth({
+export const authOptions = {
   providers: [
     Credentials({
       name: "Credentials",
@@ -65,4 +65,6 @@ export default NextAuth({
       return session;
     },
   },
-});
+};
+
+export default NextAuth(authOptions);

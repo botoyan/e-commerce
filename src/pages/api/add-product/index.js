@@ -1,6 +1,8 @@
 import connectToDatabase from "../../../lib/mongoose";
 import Product from "../../../models/Product";
 import User from "../../../models/User";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../auth/[...nextauth]";
 
 async function addProduct(req, res) {
   await connectToDatabase();
@@ -47,3 +49,5 @@ async function addProduct(req, res) {
 }
 
 export default addProduct;
+
+//TODO need to add features in API call, and in model

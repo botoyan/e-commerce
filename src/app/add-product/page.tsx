@@ -49,9 +49,38 @@ const AddProductForm = () => {
     "Lifestyle",
     "Gym & Running",
   ];
+
+  const features = [
+    "Perfect for fast breaks and sharp cuts.",
+    "Ankle support: High-top design for maximum stability.",
+    "Traction: Multi-directional grip for quick pivots.",
+    "Impact Protection: Cushioned midsole absorbs hard landings.",
+    "Breathability: Ventilated mesh upper keeps feet cool.",
+    "Stud pattern engineered for explosive acceleration.",
+    "Fit: Sock-like collar for a locked-in feel.",
+    "Touch Control: Textured upper enhances ball handling.",
+    "Lightweight build for increased agility.",
+    "Best for: Firm ground, Artificial turf, Indoor courts.",
+    "Water-resistant finish for all-weather play.",
+    "Spikeless outsole provides stability without damaging greens.",
+    "Cushioning: Responsive foam for all-day comfort.",
+    "Style: Classic leather upper with modern contours.",
+    "Best for: Driving range, 18-hole rounds, Casual club wear.",
+    "Style-forward design blends with everyday outfits.",
+    "Comfort: Memory foam insole for all-day wear.",
+    "Material: Soft knit upper with stretch fit.",
+    "Best for: Walking, Streetwear, Travel.",
+    "Weight: Ultra-light, approx. 0.6 kg.",
+    "Perfect for cardio, lifting, and high-intensity workouts.",
+    "Drop: Low heel-to-toe drop for natural foot movement.",
+    "Outsole: Grooved flex zones for improved mobility.",
+    "Stability: Reinforced heel cup for better alignment.",
+    "Durability: High-abrasion rubber in key wear zones.",
+  ];
   const [imageFile, setImageFile] = useState<File | null>(null);
   const [selectedMenSizes, setSelectedMenSizes] = useState<string[]>([]);
   const [selectedWomenSizes, setSelectedWomenSizes] = useState<string[]>([]);
+  const [selectedFeatures, setSelectedFeatures] = useState<string[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
   const [errorMessage, setErrorMessage] = useState<string>("");
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -59,6 +88,13 @@ const AddProductForm = () => {
   const toggleMenSize = (size: string) => {
     setSelectedMenSizes((prev) =>
       prev.includes(size) ? prev.filter((s) => s !== size) : [...prev, size]
+    );
+  };
+  const toggleFeatures = (feature: string) => {
+    setSelectedFeatures((prev) =>
+      prev.includes(feature)
+        ? prev.filter((f) => f !== feature)
+        : [...prev, feature]
     );
   };
   const toggleWomenSize = (size: string) => {
@@ -231,6 +267,7 @@ const AddProductForm = () => {
 
           <div>
             <Dropdown
+              selectText="Select category"
               label="Category"
               options={categories}
               selectedOptions={[]}
@@ -269,6 +306,7 @@ const AddProductForm = () => {
 
           <div>
             <Dropdown
+              selectText="Select sizes"
               label="Men's Sizes"
               options={menSizes}
               selectedOptions={selectedMenSizes}
@@ -278,10 +316,21 @@ const AddProductForm = () => {
 
           <div>
             <Dropdown
+              selectText="Select sizes"
               label="Women's Sizes"
               options={womenSizes}
               selectedOptions={selectedWomenSizes}
               onToggleOption={toggleWomenSize}
+            />
+          </div>
+
+          <div className="col-span-2">
+            <Dropdown
+              selectText="Select features"
+              label="Features"
+              options={features}
+              selectedOptions={selectedFeatures}
+              onToggleOption={toggleFeatures}
             />
           </div>
 
