@@ -29,6 +29,10 @@ const productSchema = new Schema(
     womenSizes: {
       type: [String],
     },
+    features: {
+      type: [String],
+      required: true,
+    },
   },
   { timestamps: true }
 );

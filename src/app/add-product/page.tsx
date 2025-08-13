@@ -179,6 +179,7 @@ const AddProductForm = () => {
         imageURI: base64Image,
         menSizes: selectedMenSizes,
         womenSizes: selectedWomenSizes,
+        features: selectedFeatures,
       }),
     })
       .then((res) => {

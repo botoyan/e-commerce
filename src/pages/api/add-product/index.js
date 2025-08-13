@@ -17,8 +17,16 @@ async function addProduct(req, res) {
       return res.status(403).json({ message: "Forbidden: Admins only" });
     }
     try {
-      const { name, brand, category, price, imageURI, menSizes, womenSizes } =
-        req.body;
+      const {
+        name,
+        brand,
+        category,
+        price,
+        imageURI,
+        menSizes,
+        womenSizes,
+        features,
+      } = req.body;
       const newProduct = await Product.create({
         name,
         brand,
@@ -27,6 +35,7 @@ async function addProduct(req, res) {
         imageURI,
         menSizes,
         womenSizes,
+        features,
       });
       res.status(201).json({
         status: "CREATED",
