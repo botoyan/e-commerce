@@ -219,7 +219,7 @@ function Sidebar({
       <div className="mt-auto space-y-2">
         <button
           onClick={applyFilters}
-          className="relative flex items-center justify-center gap-2 w-full bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition duration-300 hover:cursor-pointer"
+          className="relative flex items-center justify-center gap-2 w-full bg-indigo-600 text-white px-6 py-2 rounded-lg font-semibold shadow-md hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition duration-300"
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -241,7 +241,7 @@ function Sidebar({
           </span>
         </button>
 
-        <button className="flex items-center justify-center w-full gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-200 hover:text-black transition-all duration-300 ease-in-out hover:cursor-pointer">
+        <button className="flex items-center justify-center w-full gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-200 hover:text-black transition-all duration-300 ease-in-out">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-4 h-4"

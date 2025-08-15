@@ -236,7 +236,7 @@ export default function ProductPage({ params }: Props) {
                 disabled={!selectedSize || loadingForCart}
                 className={`px-6 py-3 rounded-lg text-white transition mb-6 w-full md:w-auto max-w-xs self-center md:self-start ${
                   selectedSize
-                    ? "bg-indigo-600 hover:bg-indigo-700 hover:cursor-pointer"
+                    ? "bg-indigo-600 hover:bg-indigo-700"
                     : "bg-gray-400 cursor-not-allowed"
                 }`}
               >

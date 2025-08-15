@@ -161,12 +161,12 @@ const SignIn = () => {
 
             <button
               type="submit"
-              className="w-full py-3 px-6 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition hover:cursor-pointer ease-in-out duration-500 font-semibold"
+              className="w-full py-3 px-6 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition ease-in-out duration-500 font-semibold"
             >
               Sign In
             </button>
 
-            <p className="text-center text-sm text-gray-500 hover:underline hover:cursor-pointer hover:text-gray-800">
+            <p className="text-center text-sm text-gray-500 hover:underline hover:text-gray-800">
               <Link
                 href="/create-account"
                 className="text-center text-sm text-gray-500 hover:underline hover:text-gray-800"

@@ -17,6 +17,10 @@ type Product = {
   _id: string;
 };
 
+type CartProduct = {
+  quantity: number;
+};
+
 export default function HomePage() {
   const router = useRouter();
   const filteredSidebarRef = useRef<HTMLDivElement>(null);
@@ -29,6 +33,7 @@ export default function HomePage() {
   const [categories, setCategories] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [cartItems, setCartItems] = useState<string>("0");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -84,37 +89,45 @@ export default function HomePage() {
     }
   };
 
-  useEffect(() => {
-    getProducts();
-  }, []);
+  const getCartInfo = async () => {
+    try {
+      const response = await fetch("http://localhost:3000/api/cart", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+      const sum = data.data.products.reduce(
+        (acc: number, item: CartProduct) => {
+          const quantity = item.quantity ?? 0;
+          return acc + quantity;
+        },
+        0
+      );
+      setCartItems(sum.toString());
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  };
 
   const toProductDetails = (productId: string) => {
     router.push(`/product/${productId}`);
   };
+
   useEffect(() => {
-    const body = document.body;
-    const html = document.documentElement;
-
-    const hasVerticalOverflow =
-      html.scrollHeight > window.innerHeight ||
-      body.scrollHeight > window.innerHeight;
-    const hasHorizontalOverflow =
-      html.scrollWidth > window.innerWidth ||
-      body.scrollWidth > window.innerWidth;
-
-    if (!hasVerticalOverflow && !hasHorizontalOverflow) {
-      body.style.overflow = "hidden";
-      html.style.overflow = "hidden";
-    } else {
-      body.style.overflow = "auto";
-      html.style.overflow = "auto";
-    }
+    getProducts();
+    getCartInfo();
   }, []);
   return (
     <>
       <SessionProvider>
         <div>
-          <Navbar openMenu={openMenu} setOpenMenu={setOpenMenu} />
+          <Navbar
+            openMenu={openMenu}
+            setOpenMenu={setOpenMenu}
+            cartItems={cartItems}
+          />
           <div className={filtersOpen ? "opacity-70" : "bg-white text-black"}>
             <div className="relative h-screen w-full overflow-hidden">
               <div className="absolute inset-0 bg-cover bg-center">
@@ -141,7 +154,7 @@ export default function HomePage() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.6 }}
-                  className="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition-all hover:cursor-pointer duration-500 hover:-translate-y-1"
+                  className="bg-indigo-600 text-white px-6 py-2 rounded-full font-semibold hover:bg-indigo-700 transition-all duration-500 hover:-translate-y-1"
                 >
                   Shop Now
                 </motion.button>
@@ -151,7 +164,7 @@ export default function HomePage() {
             <section className="py-16 px-8 bg-gray-50">
               <div className="mx-4 flex justify-between text-gray-800 mb-4">
                 <button
-                  className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-indigo-700 hover:cursor-pointer hover:-translate-y-0.5 active:scale-95 transition-transform duration-500"
+                  className="flex items-center gap-2 bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium shadow-md hover:bg-indigo-700 hover:-translate-y-0.5 active:scale-95 transition-transform duration-500"
                   onClick={() => {
                     setFiltersOpen(true);
                   }}
@@ -209,7 +222,7 @@ export default function HomePage() {
                             ${product.price}
                           </div>
                           <button
-                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 hover:cursor-pointer hover:-translate-y-1 transition-all duration-500"
+                            className="bg-indigo-600 text-white px-4 py-2 rounded-lg hover:bg-indigo-700 hover:-translate-y-1 transition-all duration-500"
                             onClick={() => toProductDetails(product._id)}
                           >
                             View Details

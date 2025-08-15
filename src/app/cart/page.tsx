@@ -153,6 +153,8 @@ export default function CartPage() {
     0
   );
 
+  const toCheckout = async () => {};
+
   if (loading) {
     return <Loader />;
   }
@@ -290,7 +292,10 @@ export default function CartPage() {
               <span>${calculatedTotal?.toFixed(2)}</span>
             </div>
           </div>
-          <button className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition">
+          <button
+            onClick={toCheckout}
+            className="w-full mt-6 bg-indigo-600 text-white py-3 rounded-lg hover:bg-indigo-700 transition duration-300"
+          >
             Checkout
           </button>
         </div>
@@ -298,5 +303,3 @@ export default function CartPage() {
     </div>
   );
 }
-
-//TODO need to redirect to login page people who are not logged in

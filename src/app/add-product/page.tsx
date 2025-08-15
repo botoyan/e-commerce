@@ -342,7 +342,7 @@ const AddProductForm = () => {
           <button
             type="button"
             onClick={addProduct}
-            className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition duration-500 hover:cursor-pointer col-span-2 flex justify-center"
+            className="w-full py-2 px-4 bg-indigo-600 hover:bg-indigo-700 text-white rounded-md transition duration-500 col-span-2 flex justify-center"
           >
             Add Product
           </button>

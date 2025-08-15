@@ -32,6 +32,11 @@ const userSchema = new Schema(
         required: false,
       },
     ],
+    cart: {
+      type: Schema.Types.ObjectId,
+      ref: "Cart",
+      required: false,
+    },
     resetPasswordToken: {
       type: String,
     },
@@ -44,4 +49,3 @@ const userSchema = new Schema(
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
-//TODO need to add cart here because user should be able to access cart

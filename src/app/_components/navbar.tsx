@@ -10,9 +10,10 @@ import Link from "next/link";
 type NavbarProps = {
   openMenu: boolean;
   setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>;
+  cartItems: string;
 };
 
-function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
+function Navbar({ openMenu, setOpenMenu, cartItems }: NavbarProps) {
   const data = useSession();
   return (
     <nav className="sticky bg-indigo-600 border-b-1 border-b-white">
@@ -21,7 +22,7 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
           <div className="absolute inset-y-0 left-0 flex items-center md:hidden">
             <button
               type="button"
-              className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset hover:cursor-pointer"
+              className="relative inline-flex items-center justify-center rounded-md p-2 text-white hover:bg-indigo-700 hover:text-white focus:ring-2 focus:ring-white focus:outline-hidden focus:ring-inset"
               aria-controls="mobile-menu"
               aria-expanded="false"
               onClick={() => setOpenMenu((prev) => !prev)}
@@ -113,9 +114,9 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
             <FaSearch
               color="white"
               size={25}
-              className="mt-1.5 hover:cursor-pointer hover:scale-115 transition delay-150 duration-600 ease-in-out"
+              className="mt-1.5  hover:scale-115 transition delay-150 duration-600 ease-in-out"
             />
-            <div className="relative hover:cursor-pointer hover:scale-115 transition delay-150 duration-600 ease-in-out">
+            <div className="relative hover:scale-115 transition delay-150 duration-600 ease-in-out">
               <Link href="/cart">
                 <FiShoppingCart
                   color="white"
@@ -124,7 +125,7 @@ function Navbar({ openMenu, setOpenMenu }: NavbarProps) {
                 />
               </Link>
               <div className="absolute top-[-1px] left-[28px] text-white text-sm">
-                0
+                {cartItems}
               </div>
             </div>
           </div>
