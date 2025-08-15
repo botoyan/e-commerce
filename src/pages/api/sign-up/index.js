@@ -13,7 +13,7 @@ export default async function handler(req, res) {
 
   try {
     const email = req.body.email?.trim().toLowerCase();
-    const username = req.body.username.trim().toLowerCase();
+    const username = req.body.username?.trim().toLowerCase();
     const password = req.body.password;
 
     if (!email || !username || !password) {

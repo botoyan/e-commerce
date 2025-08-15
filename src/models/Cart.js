@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
-const orderSchema = new Schema(
+const cartSchema = Schema(
   {
     user: {
       type: Schema.Types.ObjectId,
@@ -16,16 +16,20 @@ const orderSchema = new Schema(
           ref: "Product",
           required: true,
         },
+        sizeCategory: {
+          type: String,
+          enum: ["men", "women"],
+          required: true,
+        },
+        shoeSize: {
+          type: Number,
+          required: true,
+        },
         quantity: {
           type: Number,
           required: true,
           min: 1,
           default: 1,
-        },
-        price: {
-          type: Number,
-          required: true,
-          min: 0,
         },
       },
     ],
@@ -33,11 +37,6 @@ const orderSchema = new Schema(
       type: Number,
       required: true,
       min: 0,
-    },
-    status: {
-      type: String,
-      enum: ["pending", "processing", "shipped", "delivered", "cancelled"],
-      default: "pending",
     },
     date: {
       type: Date,
@@ -47,6 +46,5 @@ const orderSchema = new Schema(
   { timestamps: true }
 );
 
-const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
-export default Order;
-//TODO might need to change something, because it hasn't been used yet
+const Cart = mongoose.models.Cart || mongoose.model("Cart", cartSchema);
+export default Cart;

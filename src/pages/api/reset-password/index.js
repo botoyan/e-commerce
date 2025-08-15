@@ -12,7 +12,7 @@ export default async function handler(req, res) {
   }
   try {
     const { token, password } = req.body;
-    if (!token || password.length < 8) {
+    if (!token || !password || password.length < 8) {
       return res
         .status(400)
         .json({ message: "Missing token or invalid password." });
@@ -27,7 +27,7 @@ export default async function handler(req, res) {
     }
     const isSamePassword = await bcrypt.compare(password, user.password);
     if (isSamePassword) {
-      return res.status(200).json({
+      return res.status(400).json({
         message: "New password cannot be the same as the old password.",
       });
     }

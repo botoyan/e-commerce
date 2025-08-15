@@ -18,11 +18,10 @@ async function handler(req, res) {
         error: err,
       });
     }
+    return;
   }
-  if (req.method !== "GET" && req.method !== "POST") {
-    res.setHeader("Allow", ["GET", "POST"]);
-    res.status(405).end(`Method ${req.method} is not allowed!`);
-  }
+  res.setHeader("Allow", ["GET"]);
+  res.status(405).end(`Method ${req.method} is not allowed!`);
 }
 
 export default handler;

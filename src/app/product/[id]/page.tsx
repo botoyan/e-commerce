@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import Loader from "../../_components/loaderProduct";
+import LoadingFetch from "@/app/_components/loadingFetch";
 
 type Product = {
   _id: string;
@@ -66,6 +67,7 @@ export default function ProductPage({ params }: Props) {
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
+  const [loadingForCart, setLoadingForCart] = useState(false);
   const [selectedSize, setSelectedSize] = useState<{
     type: "men" | "women";
     value: number;
@@ -94,8 +96,39 @@ export default function ProductPage({ params }: Props) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const addToCart = () => {
-    router.replace("/cart");
+  const addToCart = async () => {
+    if (selectedSize === null) return;
+
+    setLoadingForCart(true);
+
+    try {
+      const res = await fetch("/api/cart", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          productId: id,
+          shoeSize: selectedSize.value,
+          sizeCategory: selectedSize.type,
+        }),
+      });
+
+      if (!res.ok) {
+        const error = await res.json();
+        throw new Error(error.message || "Failed to add product to cart!");
+      }
+
+      const data = await res.json();
+      if (!data) return;
+
+      router.replace("/cart");
+    } catch (error) {
+      console.error("Error adding to cart:", error);
+      alert("There was a problem adding the item to your cart.");
+    } finally {
+      setLoadingForCart(false);
+    }
   };
 
   return (
@@ -200,7 +233,7 @@ export default function ProductPage({ params }: Props) {
 
               <button
                 onClick={addToCart}
-                disabled={!selectedSize}
+                disabled={!selectedSize || loadingForCart}
                 className={`px-6 py-3 rounded-lg text-white transition mb-6 w-full md:w-auto max-w-xs self-center md:self-start ${
                   selectedSize
                     ? "bg-indigo-600 hover:bg-indigo-700 hover:cursor-pointer"
@@ -229,6 +262,11 @@ export default function ProductPage({ params }: Props) {
           </Link>
         </div>
       )}
+      <LoadingFetch
+        loading={loadingForCart}
+        text="Processing your request. You will be redirected to the cart page shortly."
+        inputText={product?.name || "Product Name"}
+      />
     </>
   );
 }

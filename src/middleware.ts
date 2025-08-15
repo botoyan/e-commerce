@@ -9,6 +9,8 @@ const AUTH_PAGES = [
 ];
 const ADMIN_ONLY = ["/add-product"];
 
+const USER_ONLY = ["/cart"];
+
 export default async function middleware(req: NextRequest) {
   const token = await getToken({
     req,
@@ -24,6 +26,11 @@ export default async function middleware(req: NextRequest) {
       return NextResponse.redirect(new URL("/unauthorized", req.url));
     }
   }
+  if (USER_ONLY.includes(pathname)) {
+    if (!token) {
+      return NextResponse.redirect(new URL("/sign-in?cart=false", req.url));
+    }
+  }
   return NextResponse.next();
 }
 
@@ -34,5 +41,6 @@ export const config = {
     "/forgot-password",
     "/reset-password",
     "/add-product",
+    "/cart",
   ],
 };

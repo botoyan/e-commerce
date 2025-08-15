@@ -172,9 +172,9 @@ const AddProductForm = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        name: product.name,
-        brand: product.brand,
-        category: product.category,
+        name: product.name.trim(),
+        brand: product.brand.trim(),
+        category: product.category.trim(),
         price: Number(product.price),
         imageURI: base64Image,
         menSizes: selectedMenSizes,
@@ -191,7 +191,7 @@ const AddProductForm = () => {
       .then((data) => {
         if (!data) return;
         clearFilters();
-        router.push("/");
+        router.replace("/");
       })
       .catch((error) => {
         setErrorMessage(

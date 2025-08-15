@@ -34,7 +34,7 @@ export default async function handler(req, res) {
     existingUser.resetPasswordExpires = Date.now() + 3600000;
     await existingUser.save();
 
-    const resetLink = `http://localhost:3000/reset-password?token=${resetToken}`;
+    const resetLink = `${process.env.NEXTAUTH_URL}/reset-password?token=${resetToken}`;
 
     await sendResetPasswordEmail(email, existingUser.username, resetLink);
 

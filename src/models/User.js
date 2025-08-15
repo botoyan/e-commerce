@@ -44,3 +44,4 @@ const userSchema = new Schema(
 
 const User = mongoose.models.User || mongoose.model("User", userSchema);
 export default User;
+//TODO need to add cart here because user should be able to access cart
