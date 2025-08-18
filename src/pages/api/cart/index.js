@@ -85,6 +85,11 @@ async function addToCart(req, res) {
 
       await cart.save();
 
+      if (!user.cart) {
+        user.cart = cart._id;
+        await user.save();
+      }
+
       res.status(200).json({ message: "Added to cart", cart });
       return;
     } catch (error) {

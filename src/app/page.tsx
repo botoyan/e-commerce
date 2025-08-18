@@ -98,14 +98,16 @@ export default function HomePage() {
         method: "GET",
       });
       const data = await response.json();
-      const sum = data.data.products.reduce(
-        (acc: number, item: CartProduct) => {
-          const quantity = item.quantity ?? 0;
-          return acc + quantity;
-        },
-        0
-      );
-      setCartItems(sum.toString());
+      if (data.data) {
+        const sum = data.data.products.reduce(
+          (acc: number, item: CartProduct) => {
+            const quantity = item.quantity ?? 0;
+            return acc + quantity;
+          },
+          0
+        );
+        setCartItems(sum.toString());
+      }
     } catch (error) {
       console.error(`Error: ${error}`);
     }

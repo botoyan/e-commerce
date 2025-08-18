@@ -219,6 +219,8 @@ const AddProductForm = () => {
               Product Name
             </label>
             <input
+              autoComplete="off"
+              autoCorrect="off"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="Enter product name"
@@ -244,6 +246,8 @@ const AddProductForm = () => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Brand</label>
             <input
+              autoComplete="off"
+              autoCorrect="off"
               type="text"
               className="w-full px-3 py-2 border border-gray-300 shadow-sm rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="e.g. Nike"
@@ -283,6 +287,8 @@ const AddProductForm = () => {
           <div>
             <label className="block text-sm text-gray-600 mb-1">Price</label>
             <input
+              autoComplete="off"
+              autoCorrect="off"
               type="number"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 transition duration-300"
               placeholder="Enter price"

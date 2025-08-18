@@ -94,6 +94,8 @@ const ForgotPassword = () => {
               Enter your email
             </label>
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               type="email"
               className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
               placeholder="you@example.com"

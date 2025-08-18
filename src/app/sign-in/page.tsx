@@ -89,6 +89,8 @@ const SignIn = () => {
             <div>
               <label className="block text-sm text-gray-600 mb-1">Email</label>
               <input
+                autoCapitalize="off"
+                autoCorrect="off"
                 type="email"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                 placeholder="you@example.com"
@@ -122,6 +124,8 @@ const SignIn = () => {
                 Password
               </label>
               <input
+                autoCapitalize="off"
+                autoCorrect="off"
                 type="password"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-indigo-600 transition"
                 placeholder="••••••••"

@@ -104,6 +104,8 @@ function Navbar({ openMenu, setOpenMenu, cartItems }: NavbarProps) {
           <div className="lg:mr-25 md:mr-20 mr-5 flex justify-center gap-x-2 gap-y-0.5">
             <div className="flex items-center rounded-full bg-indigo-600 pl-3 focus-within:ring-2 focus-within:ring-white focus-within:ring-offset-1 focus-within:ring-offset-indigo-600 transition duration-300 ease-in-out">
               <input
+                autoComplete="off"
+                autoCorrect="off"
                 type="text"
                 name="search"
                 className="block px-3.5 py-2 text-white sm:text-sm/6 w-50 rounded-3xl outline-none placeholder:text-white focus:text-gray-200 translate-x-4.5 focus:translate-x-0 transition duration-300 ease-in-out lg:w-100"

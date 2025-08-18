@@ -117,6 +117,8 @@ export default function CheckoutPage() {
           <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
           <div className="space-y-4">
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               name="fullName"
               value={form.fullName}
               onChange={handleChange}
@@ -124,6 +126,8 @@ export default function CheckoutPage() {
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
             />
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               name="email"
               value={form.email}
               onChange={handleChange}
@@ -132,6 +136,8 @@ export default function CheckoutPage() {
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
             />
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               name="street"
               value={form.street}
               onChange={handleChange}
@@ -139,6 +145,8 @@ export default function CheckoutPage() {
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
             />
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               name="city"
               value={form.city}
               onChange={handleChange}
@@ -211,6 +219,8 @@ export default function CheckoutPage() {
                 ))}
               </select>
               <input
+                autoCapitalize="off"
+                autoCorrect="off"
                 name="zip"
                 value={form.zip}
                 onChange={handleChange}
@@ -223,6 +233,8 @@ export default function CheckoutPage() {
           <h2 className="text-xl font-semibold pt-4 mb-4">Payment Details</h2>
           <div className="space-y-4">
             <input
+              autoCapitalize="off"
+              autoCorrect="off"
               name="cardNumber"
               value={form.cardNumber}
               onChange={handleChange}
@@ -231,6 +243,8 @@ export default function CheckoutPage() {
             />
             <div className="flex gap-4">
               <input
+                autoCapitalize="off"
+                autoCorrect="off"
                 name="expiry"
                 value={form.expiry}
                 onChange={handleChange}
@@ -238,6 +252,8 @@ export default function CheckoutPage() {
                 className="w-1/2 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
               />
               <input
+                autoCapitalize="off"
+                autoCorrect="off"
                 name="cvc"
                 value={form.cvc}
                 onChange={handleChange}
