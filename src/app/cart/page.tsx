@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState } from "react";
 import Image from "next/image";
+import { useRouter } from "next/navigation";
 import Loader from "../_components/loaderProduct";
 import CartEmpty from "../_components/cartEmpty";
 
@@ -22,6 +23,7 @@ type CartResponse = {
 };
 
 export default function CartPage() {
+  const router = useRouter();
   const [cartItems, setCartItems] = useState<CartResponse | null>(null);
   const [loading, setLoading] = useState(false);
   const [productRemoveMessage, setProductRemoveMessage] =
@@ -33,7 +35,9 @@ export default function CartPage() {
       const response = await fetch("/api/cart");
       if (!response.ok) throw new Error("Failed to fetch cart");
       const data = await response.json();
-      setCartItems(data.data);
+      if (data.data) {
+        setCartItems(data.data);
+      }
     } catch (error) {
       console.error("Error:", error);
     } finally {
@@ -153,7 +157,33 @@ export default function CartPage() {
     0
   );
 
-  const toCheckout = async () => {};
+  const toCheckout = async () => {
+    try {
+      const response = await fetch("api/checkout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          cartItems: cartItems,
+        }),
+      });
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`Server error: ${errorText}`);
+      }
+      const data = await response.json();
+      console.log(data);
+      if (data.data) {
+        console.log(data.data);
+        router.push(`/checkout/${data.data.user.toString()}`);
+      } else {
+        throw new Error("No session returned!");
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  };
 
   if (loading) {
     return <Loader />;

@@ -3,53 +3,33 @@ import React, { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import LoadingFetch from "@/app/_components/loadingFetch";
 
-type CheckoutItem = {
-  id: string;
-  name: string;
-  price: number;
-  image: string;
+type CartItem = {
+  product: {
+    _id: string;
+    name: string;
+    price: number;
+    imageURI: string;
+  };
   quantity: number;
-  sizes: number[];
+  sizeCategory: "men" | "women";
+  shoeSize: number;
 };
 
-const initialItems: CheckoutItem[] = [
-  {
-    id: "1",
-    name: "Nike PG 6",
-    price: 99.99,
-    image: "/assets/images/nike-pg-6.jpg",
-    quantity: 1,
-    sizes: [8.5],
-  },
-  {
-    id: "2",
-    name: "Adidas Predator",
-    price: 119.99,
-    image: "/assets/images/adidas-predator.jpg",
-    quantity: 2,
-    sizes: [7],
-  },
-  {
-    id: "3",
-    name: "Nike PG 6",
-    price: 99.99,
-    image: "/assets/images/nike-pg-6.jpg",
-    quantity: 1,
-    sizes: [8.5],
-  },
-  {
-    id: "4",
-    name: "Adidas Predator",
-    price: 119.99,
-    image: "/assets/images/adidas-predator.jpg",
-    quantity: 2,
-    sizes: [7],
-  },
-];
+type CartResponse = {
+  products: CartItem[];
+  total: number;
+};
 
-export default function CheckoutPage() {
-  const [items, setItems] = useState(initialItems);
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export default function CheckoutPage({ params }: Props) {
+  const unwrappedParams = React.use(params);
+  const id = unwrappedParams.id;
+  const [items, setItems] = useState<CartResponse | null>(null);
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -62,29 +42,8 @@ export default function CheckoutPage() {
     expiry: "",
     cvc: "",
   });
-  const [processing, setProcessing] = useState(false);
   const router = useRouter();
-
-  const total = items.reduce(
-    (acc, item) => acc + item.price * item.quantity * item.sizes.length,
-    0
-  );
-
-  const updateQty = (id: string, delta: number) => {
-    setItems((prev) =>
-      prev
-        .map((item) =>
-          item.id === id
-            ? { ...item, quantity: Math.max(1, item.quantity + delta) }
-            : item
-        )
-        .filter((item) => item.quantity > 0)
-    );
-  };
-
-  const removeItem = (id: string) => {
-    setItems((prev) => prev.filter((item) => item.id !== id));
-  };
+  const [processing, setProcessing] = useState(false);
 
   const handleChange = (
     e:
@@ -97,13 +56,24 @@ export default function CheckoutPage() {
 
   const isFormValid = Object.values(form).every((val) => val.trim() !== "");
 
-  const handleCheckout = () => {
-    if (!isFormValid || items.length === 0) return;
-    setProcessing(true);
-    setTimeout(() => {
+  const getCheckoutInfo = async () => {
+    try {
+      setProcessing(true);
+      const response = await fetch("api/checkout", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+      if (data.data) {
+        setItems(data.data.items);
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    } finally {
       setProcessing(false);
-      router.push("/thank-you");
-    }, 1500);
+    }
   };
 
   return (
@@ -268,31 +238,31 @@ export default function CheckoutPage() {
           <h2 className="text-xl font-semibold mb-6">Order Summary</h2>
 
           <div className="flex-grow overflow-auto space-y-4 pr-2">
-            {items.length === 0 && (
+            {!items && (
               <p className="text-gray-600 text-center">No items in order.</p>
             )}
-            {items.map((item) => (
+            {items?.products.map((item) => (
               <div
-                key={item.id}
+                key={item.product._id}
                 className="flex items-start gap-4 border-b pb-4 last:border-none"
               >
                 <Image
-                  src={item.image}
-                  alt={item.name}
+                  src={item.product.imageURI}
+                  alt={item.product.name}
                   width={70}
                   height={70}
                   className="rounded-lg object-cover flex-shrink-0"
                 />
                 <div className="flex-grow min-w-0">
-                  <p className="font-semibold truncate">{item.name}</p>
+                  <p className="font-semibold truncate">{item.product.name}</p>
                   <p className="text-sm text-gray-600 truncate">
-                    Sizes: {item.sizes.join(", ")}
+                    Size: {item.shoeSize}{" "}
+                    {item.sizeCategory.slice(0, 1).toUpperCase()}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <button
-                      onClick={() => updateQty(item.id, -1)}
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      aria-label={`Decrease quantity of ${item.name}`}
+                      aria-label={`Decrease quantity of ${item.product.name}`}
                     >
                       –
                     </button>
@@ -300,22 +270,18 @@ export default function CheckoutPage() {
                       {item.quantity}
                     </span>
                     <button
-                      onClick={() => updateQty(item.id, 1)}
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                      aria-label={`Increase quantity of ${item.name}`}
+                      aria-label={`Increase quantity of ${item.product.name}`}
                     >
                       +
                     </button>
                   </div>
-                  <button
-                    onClick={() => removeItem(item.id)}
-                    className="text-red-500 text-sm mt-1 hover:underline focus:outline-none focus:ring-2 focus:ring-red-400"
-                  >
+                  <button className="text-red-500 text-sm mt-1 hover:underline focus:outline-none focus:ring-2 focus:ring-red-400">
                     Remove
                   </button>
                 </div>
                 <p className="text-indigo-600 font-semibold whitespace-nowrap">
-                  ${(item.price * item.quantity * item.sizes.length).toFixed(2)}
+                  ${(item.product.price * item.quantity).toFixed(2)}
                 </p>
               </div>
             ))}
@@ -323,14 +289,12 @@ export default function CheckoutPage() {
 
           <div className="flex justify-between font-semibold text-lg mt-6 border-t pt-4">
             <span>Total:</span>
-            <span className="text-indigo-600">${total.toFixed(2)}</span>
+            <span className="text-indigo-600">${items?.total.toFixed(2)}</span>
           </div>
 
           <button
-            onClick={handleCheckout}
-            disabled={processing || !isFormValid || items.length === 0}
             className={`mt-6 bg-indigo-600 text-white py-3 rounded-lg font-semibold transition duration-300 ${
-              processing || !isFormValid || items.length === 0
+              processing
                 ? "opacity-50 cursor-not-allowed"
                 : "hover:bg-indigo-700"
             }`}
@@ -345,6 +309,11 @@ export default function CheckoutPage() {
           ← Back to Cart
         </Link>
       </div>
+      <LoadingFetch
+        loading={processing}
+        text="Processing your request. You will be redirected to the checkout page shortly."
+        inputText="Please wait..."
+      />
     </div>
   );
 }
