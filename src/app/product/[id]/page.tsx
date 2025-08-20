@@ -4,6 +4,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 import Loader from "../../_components/loaderProduct";
 import LoadingFetch from "@/app/_components/loadingFetch";
 
@@ -63,7 +64,7 @@ const womenSizes = [
 export default function ProductPage({ params }: Props) {
   const unwrappedParams = React.use(params);
   const id = unwrappedParams.id;
-
+  const data = useSession();
   const router = useRouter();
   const [product, setProduct] = useState<Product | null>(null);
   const [loading, setLoading] = useState(false);
@@ -98,6 +99,10 @@ export default function ProductPage({ params }: Props) {
 
   const addToCart = async () => {
     if (selectedSize === null) return;
+    if (data.status !== "authenticated") {
+      router.replace("/sign-in?cart=false");
+      return;
+    }
 
     setLoadingForCart(true);
 

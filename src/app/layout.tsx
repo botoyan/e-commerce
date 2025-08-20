@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect } from "react";
+import { SessionProvider } from "next-auth/react";
 import "./globals.css";
 
 export default function RootLayout({
@@ -20,8 +21,10 @@ export default function RootLayout({
     };
   }, []);
   return (
-    <html lang="en">
-      <body className="bg-gray-50 overflow-x-hidden">{children}</body>
-    </html>
+    <SessionProvider>
+      <html lang="en">
+        <body className="bg-gray-50 overflow-x-hidden">{children}</body>
+      </html>
+    </SessionProvider>
   );
 }
