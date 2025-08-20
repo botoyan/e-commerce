@@ -1,24 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import LoadingFetch from "@/app/_components/loadingFetch";
 
-type CartItem = {
+type CheckoutItem = {
   product: {
     _id: string;
     name: string;
     price: number;
     imageURI: string;
   };
-  quantity: number;
   sizeCategory: "men" | "women";
   shoeSize: number;
+  quantity: number;
 };
 
-type CartResponse = {
-  products: CartItem[];
+type CheckoutResponse = {
+  user: string;
+  items: CheckoutItem[];
   total: number;
 };
 
@@ -29,7 +30,8 @@ type Props = {
 export default function CheckoutPage({ params }: Props) {
   const unwrappedParams = React.use(params);
   const id = unwrappedParams.id;
-  const [items, setItems] = useState<CartResponse | null>(null);
+  const router = useRouter();
+  const [items, setItems] = useState<CheckoutResponse | null>(null);
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -42,7 +44,6 @@ export default function CheckoutPage({ params }: Props) {
     expiry: "",
     cvc: "",
   });
-  const router = useRouter();
   const [processing, setProcessing] = useState(false);
 
   const handleChange = (
@@ -54,25 +55,91 @@ export default function CheckoutPage({ params }: Props) {
     setForm((prev) => ({ ...prev, [name]: value }));
   };
 
-  const isFormValid = Object.values(form).every((val) => val.trim() !== "");
-
-  const getCheckoutInfo = async () => {
+  const fetchCheckout = async () => {
     try {
       setProcessing(true);
-      const response = await fetch("api/checkout", {
+      const res = await fetch(`/api/checkout/${id}`);
+      if (!res.ok) {
+        throw new Error("Failed to load checkout");
+      }
+
+      const data = await res.json();
+      setItems(data.data);
+      if (Number(data.data.total) === 0) {
+        router.replace("/cart");
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setProcessing(false);
+    }
+  };
+
+  useEffect(() => {
+    if (id) fetchCheckout();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
+  const removeItem = async (
+    productId: string,
+    shoeSize: number,
+    sizeCategory: string
+  ) => {
+    try {
+      setProcessing(true);
+      const response = await fetch(`/api/checkout/${id}`, {
         headers: {
           "Content-Type": "application/json",
         },
-        method: "GET",
+        method: "DELETE",
+        body: JSON.stringify({
+          productId,
+          shoeSize,
+          sizeCategory,
+        }),
       });
+      if (!response.ok) {
+        throw new Error("Failed to load checkout");
+      }
       const data = await response.json();
       if (data.data) {
-        setItems(data.data.items);
+        await fetchCheckout();
       }
     } catch (error) {
       console.error(`Error: ${error}`);
-    } finally {
-      setProcessing(false);
+    }
+  };
+
+  const updateQuantity = async (
+    productId: string,
+    sizeCategory: string,
+    shoeSize: number,
+    newQuantity: number
+  ) => {
+    try {
+      setProcessing(true);
+      const response = await fetch(`/api/checkout/${id}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "PUT",
+        body: JSON.stringify({
+          productId,
+          shoeSize,
+          sizeCategory,
+          newQuantity,
+        }),
+      });
+      if (!response.ok) {
+        throw new Error("Failed to load checkout");
+      }
+      const data = await response.json();
+      if (data.data) {
+        fetchCheckout();
+        setItems(data.data);
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
     }
   };
 
@@ -241,9 +308,9 @@ export default function CheckoutPage({ params }: Props) {
             {!items && (
               <p className="text-gray-600 text-center">No items in order.</p>
             )}
-            {items?.products.map((item) => (
+            {items?.items.map((item, index) => (
               <div
-                key={item.product._id}
+                key={`${item.product._id}+${index}`}
                 className="flex items-start gap-4 border-b pb-4 last:border-none"
               >
                 <Image
@@ -257,26 +324,52 @@ export default function CheckoutPage({ params }: Props) {
                   <p className="font-semibold truncate">{item.product.name}</p>
                   <p className="text-sm text-gray-600 truncate">
                     Size: {item.shoeSize}{" "}
-                    {item.sizeCategory.slice(0, 1).toUpperCase()}
+                    {item.sizeCategory.slice(0, 1).toLocaleUpperCase()}
                   </p>
                   <div className="flex items-center gap-2 mt-2">
                     <button
+                      onClick={() =>
+                        updateQuantity(
+                          item.product._id,
+                          item.sizeCategory,
+                          item.shoeSize,
+                          item.quantity - 1
+                        )
+                      }
+                      disabled={item.quantity <= 1}
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       aria-label={`Decrease quantity of ${item.product.name}`}
                     >
-                      –
+                      &minus;
                     </button>
                     <span className="font-medium min-w-[20px] text-center">
                       {item.quantity}
                     </span>
                     <button
+                      onClick={() =>
+                        updateQuantity(
+                          item.product._id,
+                          item.sizeCategory,
+                          item.shoeSize,
+                          item.quantity + 1
+                        )
+                      }
                       className="px-2 py-1 bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                       aria-label={`Increase quantity of ${item.product.name}`}
                     >
                       +
                     </button>
                   </div>
-                  <button className="text-red-500 text-sm mt-1 hover:underline focus:outline-none focus:ring-2 focus:ring-red-400">
+                  <button
+                    onClick={() =>
+                      removeItem(
+                        item.product._id,
+                        item.shoeSize,
+                        item.sizeCategory
+                      )
+                    }
+                    className="text-red-500 text-sm mt-1 hover:underline focus:outline-none focus:ring-2 focus:ring-red-400"
+                  >
                     Remove
                   </button>
                 </div>
@@ -311,7 +404,7 @@ export default function CheckoutPage({ params }: Props) {
       </div>
       <LoadingFetch
         loading={processing}
-        text="Processing your request. You will be redirected to the checkout page shortly."
+        text="Processing your request..."
         inputText="Please wait..."
       />
     </div>

@@ -1,8 +1,7 @@
 import connectToDatabase from "../../../lib/mongoose";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
-import User from "../../../models/User";
 import Checkout from "../../../models/Checkout";
+import Cart from "../../../models/Cart";
+import { getAuthenticatedUser } from "../../utils/checkout-helper";
 
 async function checkout(req, res) {
   await connectToDatabase();
@@ -11,41 +10,40 @@ async function checkout(req, res) {
     res.status(405).end(`Method ${req.method} is not allowed!`);
     return;
   }
-  const session = await getServerSession(req, res, authOptions);
-  if (!session) {
-    res.status(401).json({ message: "Unauthorized" });
-    return;
-  }
-  const user = await User.findOne({ email: session.user.email });
-  if (!user) {
-    res.status(403).json({ message: "No user logged in!" });
-    return;
-  }
-  if (!user.cart) {
-    res.status(403).json({ message: "Cart is empty!" });
-    return;
-  }
-  const { cartItems } = req.body;
-  if (!cartItems || cartItems.length === 0) {
-    res.status(403).json({ message: "Missing cart items for the request!" });
-    return;
+  const user = await getAuthenticatedUser(req, res);
+  const cart = await Cart.findOne({ user: user._id }).populate(
+    "products.product"
+  );
+
+  if (!cart || cart.products.length === 0) {
+    return res.status(403).json({ message: "Cart is empty" });
   }
 
-  const rawItems = cartItems?.products.map((item) => ({
+  const rawItems = cart.products.map((item) => ({
     product: item.product._id,
     quantity: item.quantity,
+    sizeCategory: item.sizeCategory,
+    shoeSize: item.shoeSize,
   }));
 
-  const calculatedTotal = cartItems?.products.reduce(
+  const calculatedTotal = cart.products.reduce(
     (acc, item) => acc + item.product.price * item.quantity,
     0
   );
 
-  const checkoutSession = await Checkout.create({
-    user: user._id,
-    items: rawItems,
-    total: Number(calculatedTotal.toFixed(2)),
-  });
+  let checkoutSession = await Checkout.findOne({ user: user._id });
+
+  if (checkoutSession) {
+    checkoutSession.items = rawItems;
+    checkoutSession.total = Number(calculatedTotal.toFixed(2));
+    await checkoutSession.save();
+  } else {
+    checkoutSession = await Checkout.create({
+      user: user._id,
+      items: rawItems,
+      total: Number(calculatedTotal.toFixed(2)),
+    });
+  }
 
   res.status(200).json({
     message: "Checkout session created successfully!",

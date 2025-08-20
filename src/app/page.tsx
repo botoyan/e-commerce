@@ -70,7 +70,7 @@ export default function HomePage() {
   const getProducts = async () => {
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:3000/api/products", {
+      const response = await fetch("/api/products", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -91,7 +91,7 @@ export default function HomePage() {
 
   const getCartInfo = async () => {
     try {
-      const response = await fetch("http://localhost:3000/api/cart", {
+      const response = await fetch("/api/cart", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -183,7 +183,7 @@ export default function HomePage() {
                 </button>
                 <div className="flex">
                   <div className="hidden md:flex text-gray-400 md:mt-2">
-                    Showing 3 products out of 120
+                    Showing 4 products out of 120
                   </div>
                 </div>
               </div>

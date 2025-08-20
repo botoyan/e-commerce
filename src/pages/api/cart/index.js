@@ -1,12 +1,11 @@
 import connectToDatabase from "../../../lib/mongoose";
 import Cart from "../../../models/Cart";
-import User from "../../../models/User";
-import { getServerSession } from "next-auth";
-import { authOptions } from "../auth/[...nextauth]";
+import Product from "../../../models/Product";
+import { getAuthenticatedUser } from "../../utils/cart-helper";
 
 async function addToCart(req, res) {
+  console.log(Product);
   await connectToDatabase();
-
   if (
     req.method !== "POST" &&
     req.method !== "GET" &&
@@ -19,17 +18,7 @@ async function addToCart(req, res) {
   }
 
   if (req.method === "POST") {
-    const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-      res.status(401).json({ message: "Unauthorized!" });
-      return;
-    }
-
-    const user = await User.findOne({ email: session.user.email });
-    if (!user) {
-      res.status(403).json({ message: "No user logged in!" });
-      return;
-    }
+    const user = await getAuthenticatedUser(req, res);
 
     try {
       const { productId, shoeSize, sizeCategory } = req.body;
@@ -100,17 +89,7 @@ async function addToCart(req, res) {
   }
 
   if (req.method === "GET") {
-    const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-      res.status(401).json({ message: "Unauthorized!" });
-      return;
-    }
-
-    const user = await User.findOne({ email: session.user.email });
-    if (!user) {
-      res.status(403).json({ message: "No user found!" });
-      return;
-    }
+    const user = await getAuthenticatedUser(req, res);
 
     const cart = await Cart.findOne({ user: user._id }).populate(
       "products.product"
@@ -137,21 +116,14 @@ async function addToCart(req, res) {
       data: {
         products: cart.products,
         total: cart.total,
+        cart: cart,
       },
     });
     return;
   }
 
   if (req.method === "DELETE") {
-    const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-      return res.status(401).json({ message: "Unauthorized" });
-    }
-
-    const user = await User.findOne({ email: session.user.email });
-    if (!user) {
-      return res.status(403).json({ message: "No user found!" });
-    }
+    const user = await getAuthenticatedUser(req, res);
 
     const { productId, sizeCategory, shoeSize } = req.body;
     if (!productId) {
@@ -160,10 +132,11 @@ async function addToCart(req, res) {
 
     const cart = await Cart.findOne({ user: user._id });
     if (!cart || cart.products.length === 0) {
-      return res.status(200).json({
+      res.status(200).json({
         message: "Cart is empty.",
         data: { products: [], total: 0 },
       });
+      return;
     }
 
     cart.products = cart.products.filter(
@@ -195,16 +168,7 @@ async function addToCart(req, res) {
   }
 
   if (req.method === "PUT") {
-    const session = await getServerSession(req, res, authOptions);
-    if (!session) {
-      res.status(401).json({ message: "Unauthorized!" });
-      return;
-    }
-    const user = await User.findOne({ email: session.user.email });
-    if (!user) {
-      res.status(403).json({ message: "User not found!" });
-      return;
-    }
+    const user = await getAuthenticatedUser(req, res);
     const { productId, newQuantity, shoeSize, sizeCategory } = req.body;
     if (!productId || !newQuantity) {
       res.status(400).json({ message: "Missing productId or quantity!" });

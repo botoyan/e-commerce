@@ -11,6 +11,8 @@ const checkoutSchema = new Schema({
     {
       product: { type: Schema.Types.ObjectId, ref: "Product", required: true },
       quantity: { type: Number, required: true },
+      sizeCategory: { type: String, enum: ["men", "women"], required: true },
+      shoeSize: { type: Number, required: true },
     },
   ],
   total: { type: Number, required: true },

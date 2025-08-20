@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Loader from "../_components/loaderProduct";
+import Link from "next/link";
 import CartEmpty from "../_components/cartEmpty";
 
 type CartItem = {
@@ -64,7 +65,7 @@ export default function CartPage() {
     newQuantity: number
   ) => {
     try {
-      const response = await fetch("http://localhost:3000/api/cart", {
+      const response = await fetch("/api/cart", {
         headers: {
           "Content-Type": "application/json",
         },
@@ -164,19 +165,16 @@ export default function CartPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          cartItems: cartItems,
-        }),
+        body: JSON.stringify({}),
       });
       if (!response.ok) {
         const errorText = await response.text();
         throw new Error(`Server error: ${errorText}`);
       }
       const data = await response.json();
-      console.log(data);
       if (data.data) {
         console.log(data.data);
-        router.push(`/checkout/${data.data.user.toString()}`);
+        router.push(`/checkout/${data.data._id.toString()}`);
       } else {
         throw new Error("No session returned!");
       }
@@ -330,6 +328,12 @@ export default function CartPage() {
           </button>
         </div>
       </div>
+      <Link
+        href="/"
+        className="block text-sm text-gray-500 mt-4 text-center hover:underline hover:text-gray-800"
+      >
+        ← Back to Home
+      </Link>
     </div>
   );
 }
