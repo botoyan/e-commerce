@@ -26,12 +26,10 @@ const SignIn = () => {
       return () => clearTimeout(timeout);
     }
     if (accountCreated) {
-      setAccountCreated(true);
       const timeout = setTimeout(() => setAccountCreated(false), 5000);
       return () => clearTimeout(timeout);
     }
     if (fromCart) {
-      setFromCart(true);
       const timeout = setTimeout(() => setFromCart(false), 5000);
       return () => clearTimeout(timeout);
     }

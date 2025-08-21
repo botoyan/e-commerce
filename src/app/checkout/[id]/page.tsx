@@ -32,6 +32,10 @@ export default function CheckoutPage({ params }: Props) {
   const id = unwrappedParams.id;
   const router = useRouter();
   const [items, setItems] = useState<CheckoutResponse | null>(null);
+  const regexEmail = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const expiryRegex = /^(0[1-9]|1[0-2])\/?\d{2}$/;
+  const [errorMessage, setErrorMessage] = useState(false);
+  const [disabled, setDisabled] = useState(true);
   const [form, setForm] = useState({
     fullName: "",
     email: "",
@@ -39,7 +43,6 @@ export default function CheckoutPage({ params }: Props) {
     city: "",
     state: "",
     zip: "",
-    country: "",
     cardNumber: "",
     expiry: "",
     cvc: "",
@@ -79,6 +82,28 @@ export default function CheckoutPage({ params }: Props) {
     if (id) fetchCheckout();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    const allowedKeys = [
+      "Backspace",
+      "Tab",
+      "ArrowLeft",
+      "ArrowRight",
+      "Delete",
+      "Enter",
+    ];
+
+    if (
+      allowedKeys.includes(e.key) ||
+      (e.ctrlKey && ["a", "c", "v", "x"].includes(e.key.toLowerCase()))
+    ) {
+      return;
+    }
+
+    if (!/^[0-9]$/.test(e.key)) {
+      e.preventDefault();
+    }
+  };
 
   const removeItem = async (
     productId: string,
@@ -143,12 +168,50 @@ export default function CheckoutPage({ params }: Props) {
     }
   };
 
+  useEffect(() => {
+    if (errorMessage) {
+      setTimeout(() => {
+        setErrorMessage(false);
+      }, 5000);
+    }
+    if (
+      regexEmail.test(form.email) &&
+      form.zip.length === 5 &&
+      (form.cardNumber.length === 15 || form.cardNumber.length === 16) &&
+      (form.cvc.length === 3 || form.cvc.length === 4) &&
+      expiryRegex.test(form.expiry)
+    ) {
+      setDisabled(false);
+      return;
+    } else {
+      setDisabled(true);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [errorMessage, form]);
+
+  const checkout = async () => {
+    if (
+      !regexEmail.test(form.email) ||
+      form.zip.length !== 5 ||
+      (form.cardNumber.length !== 15 && form.cardNumber.length !== 16) ||
+      (form.cvc.length !== 3 && form.cvc.length !== 4) ||
+      !expiryRegex.test(form.expiry)
+    ) {
+      setErrorMessage(true);
+      return;
+    }
+  };
+
   return (
     <div className="min-h-screen bg-gray-50 px-6 py-10 max-w-6xl mx-auto">
       <h1 className="text-4xl font-bold text-indigo-600 mb-10 text-center">
         Checkout
       </h1>
-
+      {errorMessage && (
+        <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+          Please fill out all the forms correctly before submitting!
+        </div>
+      )}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
         <section className="md:col-span-2 bg-white p-6 rounded-xl shadow-md space-y-6">
           <h2 className="text-xl font-semibold mb-4">Shipping Information</h2>
@@ -259,8 +322,10 @@ export default function CheckoutPage({ params }: Props) {
                 autoCapitalize="off"
                 autoCorrect="off"
                 name="zip"
+                maxLength={5}
                 value={form.zip}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 placeholder="ZIP Code"
                 className="w-1/2 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
               />
@@ -273,8 +338,12 @@ export default function CheckoutPage({ params }: Props) {
               autoCapitalize="off"
               autoCorrect="off"
               name="cardNumber"
+              type="string"
+              inputMode="numeric"
               value={form.cardNumber}
+              maxLength={16}
               onChange={handleChange}
+              onKeyDown={handleKeyDown}
               placeholder="Card Number"
               className="w-full border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
             />
@@ -292,8 +361,10 @@ export default function CheckoutPage({ params }: Props) {
                 autoCapitalize="off"
                 autoCorrect="off"
                 name="cvc"
+                maxLength={4}
                 value={form.cvc}
                 onChange={handleChange}
+                onKeyDown={handleKeyDown}
                 placeholder="CVC"
                 className="w-1/2 border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-600 focus:border-indigo-600"
               />
@@ -386,13 +457,12 @@ export default function CheckoutPage({ params }: Props) {
           </div>
 
           <button
+            onClick={checkout}
             className={`mt-6 bg-indigo-600 text-white py-3 rounded-lg font-semibold transition duration-300 ${
-              processing
-                ? "opacity-50 cursor-not-allowed"
-                : "hover:bg-indigo-700"
+              disabled ? "opacity-50 cursor-not-allowed" : "hover:bg-indigo-700"
             }`}
           >
-            {processing ? "Processing..." : "Place Order"}
+            Place Order
           </button>
         </section>
       </div>
