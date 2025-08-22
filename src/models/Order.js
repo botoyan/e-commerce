@@ -16,16 +16,20 @@ const orderSchema = new Schema(
           ref: "Product",
           required: true,
         },
+        sizeCategory: {
+          type: String,
+          enum: ["men", "women"],
+          required: true,
+        },
+        shoeSize: {
+          type: Number,
+          required: true,
+        },
         quantity: {
           type: Number,
           required: true,
           min: 1,
           default: 1,
-        },
-        price: {
-          type: Number,
-          required: true,
-          min: 0,
         },
       },
     ],
