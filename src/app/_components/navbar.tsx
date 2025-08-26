@@ -1,7 +1,8 @@
 "use client";
-import React from "react";
+import React, { useRef } from "react";
 import Image from "next/image";
 import sneakersIcon from "../../../public/assets/images/icon.png";
+import { useSearchParams } from "next/navigation";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
@@ -11,10 +12,14 @@ type NavbarProps = {
   openMenu: boolean;
   setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: string;
+  onSearch: (string: string) => void;
 };
 
-function Navbar({ openMenu, setOpenMenu, cartItems }: NavbarProps) {
+function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
   const data = useSession();
+  const input = useRef<HTMLInputElement | null>(null);
+  const searchParams = useSearchParams();
+  const searched = searchParams?.get("searched") || "Search...";
   return (
     <nav className="sticky bg-indigo-600 border-b-1 border-b-white">
       <div className="mx-auto max-w-10xl px-2 sm:px-6 lg:px-7">
@@ -109,7 +114,13 @@ function Navbar({ openMenu, setOpenMenu, cartItems }: NavbarProps) {
                 type="text"
                 name="search"
                 className="block px-3.5 py-2 text-white sm:text-sm/6 w-50 rounded-3xl outline-none placeholder:text-white focus:text-gray-200 translate-x-4.5 focus:translate-x-0 transition duration-300 ease-in-out lg:w-100"
-                placeholder="Search..."
+                placeholder={searched}
+                ref={input}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    return onSearch(e.currentTarget.value);
+                  }
+                }}
               />
             </div>
 
@@ -117,6 +128,11 @@ function Navbar({ openMenu, setOpenMenu, cartItems }: NavbarProps) {
               color="white"
               size={25}
               className="mt-1.5  hover:scale-115 transition delay-150 duration-600 ease-in-out"
+              onClick={() => {
+                if (input.current) {
+                  onSearch(input.current?.value);
+                }
+              }}
             />
             <div className="relative hover:scale-115 transition delay-150 duration-600 ease-in-out">
               <Link href="/cart">

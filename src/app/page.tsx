@@ -2,10 +2,11 @@
 import React, { useEffect, useState, useRef } from "react";
 import Image from "next/image";
 import Navbar from "./_components/navbar";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { motion } from "framer-motion";
 import Sidebar from "./_components/sidebar";
 import ProductSkeleton from "./_components/productSkeleton";
+import LoadingFetch from "./_components/loadingFetch";
 
 type Product = {
   name: string;
@@ -21,6 +22,7 @@ type CartProduct = {
 };
 
 export default function HomePage() {
+  const searchParams = useSearchParams();
   const router = useRouter();
   const filteredSidebarRef = useRef<HTMLDivElement>(null);
   const [openMenu, setOpenMenu] = useState<boolean>(false);
@@ -28,11 +30,15 @@ export default function HomePage() {
   const [price, setPrice] = useState<number>(0);
   const [menSize, setMenSize] = useState<number[]>([]);
   const [womenSize, setWomenSize] = useState<number[]>([]);
-  const [sortSelected, setSortSelected] = useState<string>("Recommended");
+  const [sortSelected, setSortSelected] = useState<string>("");
   const [categories, setCategories] = useState<string[]>([]);
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
+  const [loadingFetch, setLoadingFetch] = useState(false);
   const [cartItems, setCartItems] = useState<string>("0");
+  const [allProducts, setAllProducts] = useState<number>(0);
+  const [errorMessage, setErrorMessage] = useState<boolean>(false);
+  const [searched, setSearched] = useState<string>("");
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -51,23 +57,69 @@ export default function HomePage() {
     };
   }, [filtersOpen]);
 
+  useEffect(() => {
+    const sorting = searchParams?.get("sorting") || "Recommended";
+    const menSizes =
+      searchParams?.get("menSizes")?.split("+").map(Number) || [];
+    const womenSizes =
+      searchParams?.get("womenSizes")?.split("+").map(Number) || [];
+    const priceRange = searchParams?.get("prices");
+    const priceMin = priceRange ? parseInt(priceRange.split("-")[0]) : 0;
+    const categoryList = searchParams?.get("categories")?.split("+") || [];
+    const searchedQuery = searchParams?.get("searched") || "";
+
+    setSortSelected(sorting);
+    setMenSize(menSizes);
+    setWomenSize(womenSizes);
+    setPrice(priceMin);
+    setCategories(categoryList);
+    setSearched(searchedQuery);
+  }, []);
+
   const applyFilters = async () => {
-    setLoading(true);
+    if (loading) return;
+
     const params = new URLSearchParams();
-    params.set("sorting", sortSelected);
+    if (sortSelected) params.set("sorting", sortSelected);
     if (menSize.length > 0) params.set("menSizes", menSize.join("+"));
     if (womenSize.length > 0) params.set("womenSizes", womenSize.join("+"));
     if (price > 0) params.set("prices", `${price}-2000`);
     if (categories.length > 0) params.set("categories", categories.join("+"));
+    if (searched) params.set("searched", searched);
+
     const fullUrl = `/?${params.toString().toLowerCase()}`;
     router.push(fullUrl);
+    await getProducts(fullUrl);
+  };
+
+  const getProducts = async (url: string) => {
+    setLoading(true);
     try {
-      const response = await fetch(`/api/products${fullUrl}`, {
+      const query = new URLSearchParams(url.split("?")[1]);
+      const searchedText = query.get("searched");
+
+      let apiEndpoint = "/api/products";
+      let fetchOptions: RequestInit = {
         headers: {
           "Content-Type": "application/json",
         },
-      });
+      };
+
+      if (searchedText) {
+        apiEndpoint = "/api/searched";
+        fetchOptions = {
+          ...fetchOptions,
+          method: "POST",
+          body: JSON.stringify({ searched: searchedText }),
+        };
+        apiEndpoint += `?${query.toString()}`;
+      } else {
+        apiEndpoint += `?${query.toString()}`;
+      }
+
+      const response = await fetch(apiEndpoint, fetchOptions);
       if (!response.ok) {
+        setErrorMessage(true);
         throw new Error(`HTTP error! Status: ${response.status}`);
       }
 
@@ -81,25 +133,20 @@ export default function HomePage() {
     }
   };
 
-  const getProducts = async () => {
-    setLoading(true);
+  const getTotalCount = async () => {
     try {
-      const response = await fetch("/api/products", {
+      const response = await fetch("/api/products-count", {
         headers: {
           "Content-Type": "application/json",
         },
+        method: "GET",
       });
-      if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
-      }
-
       const data = await response.json();
-      return setProducts(data.data);
+      if (data.data) {
+        return setAllProducts(data.data);
+      }
     } catch (error) {
-      console.error("Failed to fetch products:", error);
-      return null;
-    } finally {
-      setLoading(false);
+      console.error(`Error: ${error}`);
     }
   };
 
@@ -132,9 +179,43 @@ export default function HomePage() {
   };
 
   useEffect(() => {
-    getProducts();
+    if (errorMessage) {
+      const timeout = setTimeout(() => setErrorMessage(false), 5000);
+      return () => clearTimeout(timeout);
+    }
+  }, [errorMessage]);
+
+  useEffect(() => {
+    const fullUrl = `/?${searchParams?.toString()}`;
+    getProducts(fullUrl);
+    getTotalCount();
     getCartInfo();
   }, []);
+
+  const onSearch = async (searchedText: string) => {
+    setLoadingFetch(true);
+    setSearched(searchedText);
+    try {
+      const params = new URLSearchParams();
+      if (sortSelected) params.set("sorting", sortSelected);
+      if (menSize.length > 0) params.set("menSizes", menSize.join("+"));
+      if (womenSize.length > 0) params.set("womenSizes", womenSize.join("+"));
+      if (price > 0) params.set("prices", `${price}-2000`);
+      if (categories.length > 0) params.set("categories", categories.join("+"));
+      if (searchedText) params.set("searched", searchedText);
+
+      const fullUrl = `/?${params.toString().toLowerCase()}`;
+
+      router.push(fullUrl);
+
+      await getProducts(fullUrl);
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    } finally {
+      setLoadingFetch(false);
+    }
+  };
+
   return (
     <>
       <div>
@@ -142,6 +223,7 @@ export default function HomePage() {
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
           cartItems={cartItems}
+          onSearch={onSearch}
         />
         <div className={filtersOpen ? "opacity-70" : "bg-white text-black"}>
           <div className="relative h-screen w-full overflow-hidden">
@@ -149,6 +231,11 @@ export default function HomePage() {
               <div className="absolute inset-0 bg-gray-50" />
             </div>
             <div className="relative z-10 flex flex-col items-center justify-center h-full text-black text-center px-4">
+              {errorMessage && (
+                <div className="p-3 rounded-md bg-red-100 border border-red-400 font-medium text-sm text-red-700 text-center mb-2">
+                  Something went wrong on our side, please refresh the page!
+                </div>
+              )}
               <motion.h1
                 initial={{ opacity: 0, y: 30 }}
                 animate={{ opacity: 1, y: 0 }}
@@ -196,7 +283,11 @@ export default function HomePage() {
               </button>
               <div className="flex">
                 <div className="hidden md:flex text-gray-400 md:mt-2">
-                  Showing 4 products out of 120
+                  {products.length === 0
+                    ? "No products matched your search criteria!"
+                    : `Showing ${products.length} products out of ${
+                        allProducts ? allProducts : "100"
+                      }`}
                 </div>
               </div>
             </div>
@@ -280,9 +371,11 @@ export default function HomePage() {
           }
         }
       `}</style>
+      <LoadingFetch
+        loading={loadingFetch}
+        inputText={searched}
+        text="Processing your request..."
+      />
     </>
   );
 }
-
-//TODO need to add error message for user
-//TODO need to disable applyFilters when fetching

@@ -1,5 +1,6 @@
-"use-client";
-import React from "react";
+"use client";
+import React, { useEffect } from "react";
+import { useSearchParams } from "next/navigation";
 
 type Sidebar = {
   filtersOpen: boolean;
@@ -30,6 +31,16 @@ function Sidebar({
   applyFilters,
   filteredSidebarRef,
 }: Sidebar) {
+  const searchParams = useSearchParams();
+  useEffect(() => {
+    setSortSelected(searchParams?.get("sorting") || "Recommended");
+    setMenSize(searchParams?.get("menSizes")?.split("+").map(Number) || []);
+    setWomenSize(searchParams?.get("womenSizes")?.split("+").map(Number) || []);
+    const priceRange = searchParams?.get("prices");
+    setPrice(priceRange ? parseInt(priceRange.split("-")[0]) : 0);
+    setCategories(searchParams?.get("categories")?.split("+") || []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   return (
     <div
       ref={filteredSidebarRef}
