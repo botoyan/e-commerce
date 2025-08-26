@@ -73,3 +73,4 @@ async function addProduct(req, res) {
 }
 
 export default addProduct;
+//TODO need to lower case everything

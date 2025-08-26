@@ -76,8 +76,8 @@ function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
                   style={{ height: "auto" }}
                 />
                 <Link
-                  href="#"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 "
+                  href="#products"
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
                 >
                   Shop
                 </Link>
@@ -152,7 +152,7 @@ function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
       <div className={openMenu ? "md:hidden" : "hidden"} id="mobile-menu">
         <div className="space-y-1 px-2 pt-2 pb-3">
           <Link
-            href="#"
+            href="#products"
             className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
             aria-current="page"
           >

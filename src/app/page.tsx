@@ -58,11 +58,12 @@ export default function HomePage() {
   }, [filtersOpen]);
 
   useEffect(() => {
+    if (!searchParams || searchParams.toString() === "") return;
     const sorting = searchParams?.get("sorting") || "Recommended";
     const menSizes =
-      searchParams?.get("menSizes")?.split("+").map(Number) || [];
+      searchParams?.get("mensizes")?.split("+").map(Number) || [];
     const womenSizes =
-      searchParams?.get("womenSizes")?.split("+").map(Number) || [];
+      searchParams?.get("womensizes")?.split("+").map(Number) || [];
     const priceRange = searchParams?.get("prices");
     const priceMin = priceRange ? parseInt(priceRange.split("-")[0]) : 0;
     const categoryList = searchParams?.get("categories")?.split("+") || [];
@@ -74,7 +75,7 @@ export default function HomePage() {
     setPrice(priceMin);
     setCategories(categoryList);
     setSearched(searchedQuery);
-  }, []);
+  }, [searchParams]);
 
   const applyFilters = async () => {
     if (loading) return;
@@ -186,6 +187,7 @@ export default function HomePage() {
   }, [errorMessage]);
 
   useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "instant" });
     const fullUrl = `/?${searchParams?.toString()}`;
     getProducts(fullUrl);
     getTotalCount();
@@ -214,6 +216,19 @@ export default function HomePage() {
     } finally {
       setLoadingFetch(false);
     }
+  };
+
+  const clearFilters = async () => {
+    setSortSelected("Recommended");
+    setMenSize([]);
+    setWomenSize([]);
+    setPrice(0);
+    setCategories([]);
+    setSearched("");
+
+    router.push("/");
+
+    await getProducts("/");
   };
 
   return (
@@ -294,7 +309,10 @@ export default function HomePage() {
             {loading ? (
               [...Array(8)].map((_, i) => <ProductSkeleton key={i} />)
             ) : (
-              <div className="grid grid-cols-1 custom-grid-520 custom-grid-820 lg:grid-cols-4 gap-10 px-4">
+              <div
+                id="products"
+                className="grid grid-cols-1 custom-grid-520 custom-grid-820 lg:grid-cols-4 gap-10 px-4"
+              >
                 {products.map((product, index) => {
                   return (
                     <motion.div
@@ -306,7 +324,8 @@ export default function HomePage() {
                       className="bg-white rounded-2xl shadow-md hover:shadow-xl hover:-translate-y-1 transition duration-300 p-4 flex flex-col justify-between min-w-[240px]"
                     >
                       <span className="text-xs bg-zinc-200 text-zinc-600 px-2 py-1 rounded-full w-max mb-3 font-medium">
-                        {product.category}
+                        {product.category.charAt(0).toUpperCase() +
+                          product.category.slice(1).toLowerCase()}
                       </span>
                       <Image
                         src={product.imageURI}
@@ -317,7 +336,8 @@ export default function HomePage() {
                       />
                       <div className="mb-4">
                         <h3 className="text-lg font-bold text-gray-900">
-                          {product.name}
+                          {product.name.charAt(0).toUpperCase() +
+                            product.name.slice(1).toLowerCase()}
                         </h3>
                         <p className="text-sm text-slate-600">
                           {product.features[0] ||
@@ -345,6 +365,7 @@ export default function HomePage() {
           </section>
         </div>
         <Sidebar
+          sortSelected={sortSelected}
           filtersOpen={filtersOpen}
           setSortSelected={setSortSelected}
           menSize={menSize}
@@ -357,6 +378,7 @@ export default function HomePage() {
           setCategories={setCategories}
           applyFilters={applyFilters}
           filteredSidebarRef={filteredSidebarRef}
+          clearFilters={clearFilters}
         />
       </div>
       <style jsx>{`

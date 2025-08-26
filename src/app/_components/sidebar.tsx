@@ -1,9 +1,9 @@
 "use client";
-import React, { useEffect } from "react";
-import { useSearchParams } from "next/navigation";
+import React from "react";
 
 type Sidebar = {
   filtersOpen: boolean;
+  sortSelected: string;
   setSortSelected: React.Dispatch<React.SetStateAction<string>>;
   menSize: number[];
   setMenSize: React.Dispatch<React.SetStateAction<number[]>>;
@@ -15,10 +15,12 @@ type Sidebar = {
   setCategories: React.Dispatch<React.SetStateAction<string[]>>;
   applyFilters: () => void;
   filteredSidebarRef: React.RefObject<HTMLDivElement | null>;
+  clearFilters: () => void;
 };
 
 function Sidebar({
   filtersOpen,
+  sortSelected,
   setSortSelected,
   menSize,
   setMenSize,
@@ -30,17 +32,8 @@ function Sidebar({
   setCategories,
   applyFilters,
   filteredSidebarRef,
+  clearFilters,
 }: Sidebar) {
-  const searchParams = useSearchParams();
-  useEffect(() => {
-    setSortSelected(searchParams?.get("sorting") || "Recommended");
-    setMenSize(searchParams?.get("menSizes")?.split("+").map(Number) || []);
-    setWomenSize(searchParams?.get("womenSizes")?.split("+").map(Number) || []);
-    const priceRange = searchParams?.get("prices");
-    setPrice(priceRange ? parseInt(priceRange.split("-")[0]) : 0);
-    setCategories(searchParams?.get("categories")?.split("+") || []);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
   return (
     <div
       ref={filteredSidebarRef}
@@ -61,6 +54,10 @@ function Sidebar({
             Sort by
           </label>
           <select
+            value={
+              sortSelected.charAt(0).toUpperCase() +
+              sortSelected.slice(1).toLowerCase()
+            }
             id="sort"
             className="w-full appearance-none bg-gray-100 border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2.5 pr-8 shadow-sm
           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400
@@ -71,7 +68,7 @@ function Sidebar({
           >
             <option>Recommended</option>
             <option>Price: low to high</option>
-            <option>Best Discount</option>
+            <option>Best discount</option>
             <option>Price: high to low</option>
           </select>
         </div>
@@ -204,18 +201,18 @@ function Sidebar({
               <span
                 key={cat}
                 className={
-                  categories.includes(cat)
+                  categories.includes(cat.toLowerCase())
                     ? "px-3 py-1 bg-gray-800 rounded-full text-gray-200 hover:bg-gray-500"
                     : "px-3 py-1 bg-gray-200 rounded-full text-gray-800 hover:bg-gray-300"
                 }
                 onClick={() => {
                   setCategories((prev) => {
-                    if ([...prev].includes(cat)) {
+                    if ([...prev].includes(cat.toLowerCase())) {
                       return [...prev].filter((item) => {
-                        return item !== cat;
+                        return item !== cat.toLowerCase();
                       });
                     } else {
-                      return [...prev, cat];
+                      return [...prev, cat.toLowerCase()];
                     }
                   });
                 }}
@@ -287,7 +284,10 @@ function Sidebar({
           </span>
         </button>
 
-        <button className="flex items-center justify-center w-full gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-200 hover:text-black transition-all duration-300 ease-in-out">
+        <button
+          className="flex items-center justify-center w-full gap-2 px-5 py-2.5 bg-gray-100 text-gray-700 rounded-lg font-medium border border-gray-300 shadow-sm hover:bg-gray-200 hover:text-black transition-all duration-300 ease-in-out"
+          onClick={clearFilters}
+        >
           <svg
             xmlns="http://www.w3.org/2000/svg"
             className="w-4 h-4"
