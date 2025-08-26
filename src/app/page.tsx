@@ -51,19 +51,34 @@ export default function HomePage() {
     };
   }, [filtersOpen]);
 
-  const applyFilters = () => {
+  const applyFilters = async () => {
+    setLoading(true);
     const params = new URLSearchParams();
-
     params.set("sorting", sortSelected);
-
     if (menSize.length > 0) params.set("menSizes", menSize.join("+"));
     if (womenSize.length > 0) params.set("womenSizes", womenSize.join("+"));
     if (price > 0) params.set("prices", `${price}-2000`);
-    if (categories.length > 0) params.set("tags", categories.join("+"));
-
-    const fullUrl = `/filteringOptions?${params.toString().toLowerCase()}`;
-
+    if (categories.length > 0) params.set("categories", categories.join("+"));
+    const fullUrl = `/?${params.toString().toLowerCase()}`;
     router.push(fullUrl);
+    try {
+      const response = await fetch(`/api/products${fullUrl}`, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      const data = await response.json();
+      return setProducts(data.data);
+    } catch (error) {
+      console.error("Failed to fetch products:", error);
+      return null;
+    } finally {
+      setLoading(false);
+    }
   };
 
   const getProducts = async () => {
@@ -192,7 +207,7 @@ export default function HomePage() {
                 {products.map((product, index) => {
                   return (
                     <motion.div
-                      key={index}
+                      key={product._id}
                       initial={{ opacity: 1, scale: 0.95 }}
                       whileInView={{ opacity: 1, scale: 1 }}
                       viewport={{ once: true }}
@@ -214,7 +229,10 @@ export default function HomePage() {
                           {product.name}
                         </h3>
                         <p className="text-sm text-slate-600">
-                          {product.features[0 || 1 || 2]}
+                          {product.features[0] ||
+                            product.features[1] ||
+                            product.features[2] ||
+                            "No features"}
                         </p>
                       </div>
                       <div className="flex items-center justify-between">
@@ -265,3 +283,6 @@ export default function HomePage() {
     </>
   );
 }
+
+//TODO need to add error message for user
+//TODO need to disable applyFilters when fetching

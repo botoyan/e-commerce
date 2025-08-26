@@ -53,7 +53,7 @@ function Sidebar({
             id="sort"
             className="w-full appearance-none bg-gray-100 border border-gray-300 text-gray-800 text-sm rounded-lg px-4 py-2.5 pr-8 shadow-sm
           focus:outline-none focus:ring-2 focus:ring-gray-400 focus:border-gray-400
-          cursor-pointer"
+          "
             onChange={(e: React.ChangeEvent<HTMLSelectElement>) => {
               return setSortSelected(e.currentTarget.value);
             }}
@@ -171,7 +171,7 @@ function Sidebar({
               step="5"
               onChange={(e) => setPrice(Number(e.target.value))}
               value={price}
-              className="w-full h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer accent-black"
+              className="w-full h-2 bg-gray-200 rounded-lg appearance-none accent-black"
             />
             <div className="flex justify-between text-sm text-gray-700 font-semibold">
               <span>{price}</span>
@@ -189,27 +189,27 @@ function Sidebar({
               "Golf",
               "Lifestyle",
               "Gym & Running",
-            ].map((tag) => (
+            ].map((cat) => (
               <span
-                key={tag}
+                key={cat}
                 className={
-                  categories.includes(tag)
-                    ? "px-3 py-1 bg-gray-800 rounded-full text-gray-200 hover:bg-gray-500 cursor-pointer"
-                    : "px-3 py-1 bg-gray-200 rounded-full text-gray-800 hover:bg-gray-300 cursor-pointer"
+                  categories.includes(cat)
+                    ? "px-3 py-1 bg-gray-800 rounded-full text-gray-200 hover:bg-gray-500"
+                    : "px-3 py-1 bg-gray-200 rounded-full text-gray-800 hover:bg-gray-300"
                 }
                 onClick={() => {
                   setCategories((prev) => {
-                    if ([...prev].includes(tag)) {
+                    if ([...prev].includes(cat)) {
                       return [...prev].filter((item) => {
-                        return item !== tag;
+                        return item !== cat;
                       });
                     } else {
-                      return [...prev, tag];
+                      return [...prev, cat];
                     }
                   });
                 }}
               >
-                {tag}
+                {cat}
               </span>
             ))}
           </div>
@@ -237,7 +237,42 @@ function Sidebar({
           </svg>
           Apply Filters
           <span className="absolute -top-2 -right-2 w-7 h-7 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center shadow-md overflow-hidden">
-            3
+            <svg
+              className="w-5 h-5 text-white animate-spin-slow"
+              xmlns="http://www.w3.org/2000/svg"
+              viewBox="0 0 50 50"
+              fill="none"
+            >
+              <circle
+                cx="25"
+                cy="25"
+                r="20"
+                stroke="currentColor"
+                strokeWidth="5"
+                strokeLinecap="round"
+                strokeDasharray="30"
+                strokeDashoffset="15"
+              />
+            </svg>
+
+            <style jsx>{`
+              @keyframes spinSlow {
+                0% {
+                  transform: rotate(0deg);
+                }
+                80% {
+                  transform: rotate(360deg);
+                }
+                100% {
+                  transform: rotate(360deg);
+                }
+              }
+
+              .animate-spin-slow {
+                animation: spinSlow 1.6s ease-in-out infinite;
+                transform-origin: center;
+              }
+            `}</style>
           </span>
         </button>
 
