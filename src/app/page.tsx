@@ -91,6 +91,7 @@ export default function HomePage() {
     const fullUrl = `/?${params.toString().toLowerCase()}`;
     router.push(fullUrl);
     await getProducts(fullUrl);
+    setFiltersOpen(false);
   };
 
   const getProducts = async (url: string) => {
@@ -229,6 +230,7 @@ export default function HomePage() {
     router.push("/");
 
     await getProducts("/");
+    setFiltersOpen(false);
   };
 
   return (

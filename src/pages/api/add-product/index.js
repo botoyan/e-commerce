@@ -48,13 +48,13 @@ async function addProduct(req, res) {
       });
     }
     const newProduct = await Product.create({
-      name,
-      brand,
-      category,
+      name: name.toLowerCase(),
+      brand: brand.toLowerCase(),
+      category: category.toLowerCase(),
       price,
       imageURI,
-      menSizes,
-      womenSizes,
+      menSizes: menSizes.sort((a, b) => a - b),
+      womenSizes: womenSizes.sort((a, b) => a - b),
       features,
     });
     res.status(201).json({
@@ -73,4 +73,3 @@ async function addProduct(req, res) {
 }
 
 export default addProduct;
-//TODO need to lower case everything

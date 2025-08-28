@@ -191,35 +191,31 @@ function Sidebar({
         <div>
           <h3 className="text-lg font-semibold mb-3">Categories</h3>
           <div className="flex flex-wrap gap-2">
-            {[
-              "Basketball",
-              "Football",
-              "Golf",
-              "Lifestyle",
-              "Gym & Running",
-            ].map((cat) => (
-              <span
-                key={cat}
-                className={
-                  categories.includes(cat.toLowerCase())
-                    ? "px-3 py-1 bg-gray-800 rounded-full text-gray-200 hover:bg-gray-500"
-                    : "px-3 py-1 bg-gray-200 rounded-full text-gray-800 hover:bg-gray-300"
-                }
-                onClick={() => {
-                  setCategories((prev) => {
-                    if ([...prev].includes(cat.toLowerCase())) {
-                      return [...prev].filter((item) => {
-                        return item !== cat.toLowerCase();
-                      });
-                    } else {
-                      return [...prev, cat.toLowerCase()];
-                    }
-                  });
-                }}
-              >
-                {cat}
-              </span>
-            ))}
+            {["Basketball", "Football", "Golf", "Casual", "Gym & Running"].map(
+              (cat) => (
+                <span
+                  key={cat}
+                  className={
+                    categories.includes(cat.toLowerCase())
+                      ? "px-3 py-1 bg-gray-800 rounded-full text-gray-200 hover:bg-gray-500"
+                      : "px-3 py-1 bg-gray-200 rounded-full text-gray-800 hover:bg-gray-300"
+                  }
+                  onClick={() => {
+                    setCategories((prev) => {
+                      if ([...prev].includes(cat.toLowerCase())) {
+                        return [...prev].filter((item) => {
+                          return item !== cat.toLowerCase();
+                        });
+                      } else {
+                        return [...prev, cat.toLowerCase()];
+                      }
+                    });
+                  }}
+                >
+                  {cat}
+                </span>
+              )
+            )}
           </div>
         </div>
       </div>

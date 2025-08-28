@@ -46,7 +46,7 @@ const AddProductForm = () => {
     "Basketball",
     "Football",
     "Golf",
-    "Lifestyle",
+    "Casual",
     "Gym & Running",
   ];
 
