@@ -1,8 +1,8 @@
 "use client";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import sneakersIcon from "../../../public/assets/images/icon.png";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { FiShoppingCart } from "react-icons/fi";
 import { FaSearch } from "react-icons/fa";
 import { signOut, useSession } from "next-auth/react";
@@ -11,15 +11,58 @@ import Link from "next/link";
 type NavbarProps = {
   openMenu: boolean;
   setOpenMenu: React.Dispatch<React.SetStateAction<boolean>>;
-  cartItems: string;
   onSearch: (string: string) => void;
 };
 
-function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
+type CartProduct = {
+  quantity: number;
+};
+
+function Navbar({ openMenu, setOpenMenu, onSearch }: NavbarProps) {
   const data = useSession();
+  const router = useRouter();
+  const pathname = usePathname();
   const input = useRef<HTMLInputElement | null>(null);
+  const [cartItems, setCartItems] = useState<string>("0");
   const searchParams = useSearchParams();
   const searched = searchParams?.get("searched") || "Search...";
+
+  const getCartInfo = async () => {
+    try {
+      const response = await fetch("/api/cart", {
+        headers: {
+          "Content-Type": "application/json",
+        },
+        method: "GET",
+      });
+      const data = await response.json();
+      if (data.data) {
+        const sum = data.data.products.reduce(
+          (acc: number, item: CartProduct) => {
+            const quantity = item.quantity ?? 0;
+            return acc + quantity;
+          },
+          0
+        );
+        setCartItems(sum.toString());
+      }
+    } catch (error) {
+      console.error(`Error: ${error}`);
+    }
+  };
+  useEffect(() => {
+    getCartInfo();
+  }, []);
+  const handleShopClick = () => {
+    if (pathname === "/") {
+      const productsSection = document.getElementById("products");
+      if (productsSection) {
+        productsSection.scrollIntoView({ behavior: "smooth" });
+      }
+    } else {
+      router.push("/");
+    }
+  };
   return (
     <nav className="sticky bg-indigo-600 border-b-1 border-b-white">
       <div className="mx-auto max-w-10xl px-2 sm:px-6 lg:px-7">
@@ -75,18 +118,24 @@ function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
                   alt="sneakers-icon"
                   style={{ height: "auto" }}
                 />
-                <Link
-                  href="#products"
-                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                <button
+                  onClick={handleShopClick}
+                  className="rounded-md px-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 hover:cursor-pointer"
                 >
                   Shop
-                </Link>
-                <Link
-                  href="#"
-                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110"
+                </button>
+                <button
+                  onClick={() => {
+                    if (data.status === "authenticated") {
+                      router.push("/user");
+                    } else {
+                      router.push("/sign-in");
+                    }
+                  }}
+                  className="rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-110 hover:cursor-pointer"
                 >
                   Account
-                </Link>
+                </button>
                 {data.status === "authenticated" ? (
                   <Link
                     href="#"
@@ -151,19 +200,24 @@ function Navbar({ openMenu, setOpenMenu, cartItems, onSearch }: NavbarProps) {
       </div>
       <div className={openMenu ? "md:hidden" : "hidden"} id="mobile-menu">
         <div className="space-y-1 px-2 pt-2 pb-3">
-          <Link
-            href="#products"
+          <button
+            onClick={handleShopClick}
             className="block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101"
-            aria-current="page"
           >
             Shop
-          </Link>
-          <Link
-            href="#"
-            className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 "
+          </button>
+          <button
+            onClick={() => {
+              if (data.status === "authenticated") {
+                router.push("/user");
+              } else {
+                router.push("/sign-in");
+              }
+            }}
+            className="my-3 block rounded-md pr-3 pl-3 py-2 text-sm font-medium text-[#FAF9F6] hover:bg-indigo-700 hover:opacity-90 transition delay-150 duration-500 ease-in-out hover:-translate-y-0.5 hover:scale-101 hover:cursor-pointer"
           >
             Account
-          </Link>
+          </button>
           {data.status === "authenticated" ? (
             <Link
               href="#"

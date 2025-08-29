@@ -17,10 +17,6 @@ type Product = {
   _id: string;
 };
 
-type CartProduct = {
-  quantity: number;
-};
-
 export default function HomePage() {
   const searchParams = useSearchParams();
   const router = useRouter();
@@ -35,7 +31,6 @@ export default function HomePage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(false);
   const [loadingFetch, setLoadingFetch] = useState(false);
-  const [cartItems, setCartItems] = useState<string>("0");
   const [allProducts, setAllProducts] = useState<number>(0);
   const [errorMessage, setErrorMessage] = useState<boolean>(false);
   const [searched, setSearched] = useState<string>("");
@@ -152,30 +147,6 @@ export default function HomePage() {
     }
   };
 
-  const getCartInfo = async () => {
-    try {
-      const response = await fetch("/api/cart", {
-        headers: {
-          "Content-Type": "application/json",
-        },
-        method: "GET",
-      });
-      const data = await response.json();
-      if (data.data) {
-        const sum = data.data.products.reduce(
-          (acc: number, item: CartProduct) => {
-            const quantity = item.quantity ?? 0;
-            return acc + quantity;
-          },
-          0
-        );
-        setCartItems(sum.toString());
-      }
-    } catch (error) {
-      console.error(`Error: ${error}`);
-    }
-  };
-
   const toProductDetails = (productId: string) => {
     router.push(`/product/${productId}`);
   };
@@ -192,7 +163,6 @@ export default function HomePage() {
     const fullUrl = `/?${searchParams?.toString()}`;
     getProducts(fullUrl);
     getTotalCount();
-    getCartInfo();
   }, []);
 
   const onSearch = async (searchedText: string) => {
@@ -239,7 +209,6 @@ export default function HomePage() {
         <Navbar
           openMenu={openMenu}
           setOpenMenu={setOpenMenu}
-          cartItems={cartItems}
           onSearch={onSearch}
         />
         <div className={filtersOpen ? "opacity-70" : "bg-white text-black"}>
