@@ -53,4 +53,3 @@ const orderSchema = new Schema(
 
 const Order = mongoose.models.Order || mongoose.model("Order", orderSchema);
 export default Order;
-//TODO might need to change something, because it hasn't been used yet

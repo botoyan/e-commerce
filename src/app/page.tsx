@@ -63,7 +63,6 @@ export default function HomePage() {
     const priceMin = priceRange ? parseInt(priceRange.split("-")[0]) : 0;
     const categoryList = searchParams?.get("categories")?.split("+") || [];
     const searchedQuery = searchParams?.get("searched") || "";
-
     setSortSelected(sorting);
     setMenSize(menSizes);
     setWomenSize(womenSizes);

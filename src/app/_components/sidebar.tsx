@@ -183,7 +183,7 @@ function Sidebar({
             />
             <div className="flex justify-between text-sm text-gray-700 font-semibold">
               <span>{price}</span>
-              <span>$2000</span>
+              <span>2000</span>
             </div>
           </div>
         </div>
@@ -306,3 +306,5 @@ function Sidebar({
 }
 
 export default Sidebar;
+
+//TODO need to make price sync with the product highest price
